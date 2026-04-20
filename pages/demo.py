@@ -157,6 +157,8 @@ st.markdown("""
 # Sidebar — Slack alert feed + architecture
 # ---------------------------------------------------------------------------
 with st.sidebar:
+    if st.button("🏠 Home", use_container_width=True, type="secondary"):
+        st.switch_page("pages/landing.py")
     try:
         st.image("diagrams/architecture.png", use_container_width=True)
     except Exception:
