@@ -1,10 +1,9 @@
-"""Landing page — serves the static HTML landing page."""
+"""Landing page — embedded HTML with working navigation."""
 
 from pathlib import Path
 import streamlit as st
 import streamlit.components.v1 as components
 
-# Hide sidebar on landing
 st.markdown("""<style>
 [data-testid="stSidebar"] { display: none !important; }
 section[data-testid="stSidebarCollapsedControl"] { display: none !important; }
@@ -12,15 +11,17 @@ section[data-testid="stSidebarCollapsedControl"] { display: none !important; }
 [data-testid="stMainBlockContainer"] { padding: 0 !important; max-width: 100% !important; }
 </style>""", unsafe_allow_html=True)
 
-# Read landing HTML
 html_path = Path(__file__).parent.parent / "landing.html"
 html = html_path.read_text()
 
-# Replace demo links with javascript that posts message to parent
+# Replace all demo links with top-level navigation
+html = html.replace('href="/demo"', 'href="/demo" target="_top"')
+html = html.replace('href="http://localhost:8501"', 'href="/demo" target="_top"')
+
+# Remove video section (mp4 not available on cloud)
 html = html.replace(
-    'href="/demo"',
-    'href="/demo" onclick="window.parent.location.href=\'/demo\'; return false;"'
+    '<video id="demo-video" width="100%" controls style="display:none; background:#000;">',
+    '<video id="demo-video" width="100%" controls style="display:none; background:#000;" hidden>'
 )
 
-# Render full-page HTML
-components.html(html, height=2800, scrolling=True)
+components.html(html, height=3200, scrolling=True)
