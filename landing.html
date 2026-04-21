@@ -160,24 +160,9 @@
 <!-- VIDEO -->
 <div id="video" style="max-width:800px; margin:0 auto 48px; padding:0 24px;">
   <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden;">
-    <video id="demo-video" width="100%" controls style="display:none; background:#000;">
-      <source src="assets/demo.mp4" type="video/mp4">
-    </video>
-    <div id="video-placeholder" style="padding:56px 24px; text-align:center;">
-      <div style="width:56px; height:56px; border-radius:50%; background:var(--accent-light); border:1px solid rgba(59,130,246,0.25);
-                  display:inline-flex; align-items:center; justify-content:center; margin-bottom:16px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-      </div>
-      <div style="font-weight:600; font-size:0.9rem; color:var(--text-primary); margin-bottom:4px;">Demo Recording</div>
-      <div style="font-size:0.78rem; color:var(--text-muted);">Record with Cmd+Shift+5, save as demo_ui/assets/demo.mp4</div>
-    </div>
+    <iframe width="100%" height="450" src="https://www.youtube.com/embed/r60EKVYHnDo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:block;"></iframe>
   </div>
 </div>
-<script>
-const v=document.getElementById('demo-video'),p=document.getElementById('video-placeholder');
-v.addEventListener('loadeddata',()=>{p.style.display='none';v.style.display='block';});
-v.addEventListener('error',()=>{v.style.display='none';});
-</script>
 
 <div class="metrics-bar">
   <div class="metric-item"><div class="value">2s</div><div class="label">Time to insight</div></div>
