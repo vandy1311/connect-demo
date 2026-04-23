@@ -182,62 +182,115 @@ with tab_agents:
 # ═══════════════════════════════════════════════════════════════
 with tab_arch:
     st.markdown("### System Architecture")
-    st.caption("Built on AWS with Bedrock AgentCore, CDK, Lambda, Athena, and EventBridge")
+    st.caption("From data ingestion to Slack alerts — the complete pipeline")
     st.write("")
 
     import streamlit.components.v1 as components
-    # Self-contained HTML with inline Mermaid (no external CDN)
-    mermaid_html = """<!DOCTYPE html>
-<html><head>
-<script type="module">
-import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-mermaid.initialize({
-  startOnLoad: true,
-  theme: 'dark',
-  themeVariables: {
-    darkMode: true,
-    background: '#0f172a',
-    primaryColor: '#1e293b',
-    primaryTextColor: '#f1f5f9',
-    primaryBorderColor: '#334155',
-    lineColor: '#475569',
-    secondaryColor: '#1e293b',
-    tertiaryColor: '#1e293b',
-    fontSize: '14px',
-    fontFamily: 'Inter, system-ui, sans-serif'
-  }
-});
-</script>
-</head>
-<body style="background:#0f172a; margin:0; display:flex; justify-content:center; padding:20px 0;">
-<pre class="mermaid">
-graph TD
-    A["☁️ Amazon Connect"]:::src --> B["📦 S3 Data Lake"]:::store
-    B --> C["📚 Glue Catalog"]:::store
-    B --> D["🔍 Athena"]:::store
-    B --> E["🧠 Knowledge Base"]:::store
-    C --> F["🌐 AgentCore Gateway"]:::gw
-    D --> F
-    E --> F
-    F --> G["🟢 Supervisor Agent"]:::agt
-    F --> H["🟠 Quality Agent"]:::agt
-    F --> I["🔵 WFM Agent"]:::agt
-    G --> J["⚡ Tool Lambda"]:::fn
-    H --> J
-    I --> J
-    J --> K["📡 EventBridge"]:::evt
-    K --> L["📬 SNS Topics"]:::evt
-    L --> M["💬 Slack"]:::evt
+    arch_svg = """<!DOCTYPE html>
+<html><head><style>
+body { margin:0; background:#0f172a; font-family:Inter,system-ui,sans-serif; }
+.arch { max-width:820px; margin:0 auto; padding:24px 16px; }
+.layer { margin-bottom:4px; }
+.layer-label {
+  font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+  color:#64748b; padding:6px 12px; margin-bottom:6px;
+}
+.row { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:4px; }
+.box {
+  background:#1e293b; border:1px solid #334155; border-radius:10px;
+  padding:14px 20px; text-align:center; min-width:140px; flex:1; max-width:260px;
+}
+.box .icon { font-size:20px; margin-bottom:4px; }
+.box .title { font-size:13px; font-weight:700; color:#f1f5f9; }
+.box .sub { font-size:10px; color:#64748b; margin-top:2px; }
+.box.src { border-color:#3b82f6; background:#172554; }
+.box.src .title { color:#93c5fd; }
+.box.gw { border-color:#3b82f6; border-width:2px; background:#172554; }
+.box.gw .title { color:#93c5fd; }
+.box.agt-s { border-color:#22c55e; border-width:2px; background:#052e16; }
+.box.agt-s .title { color:#86efac; }
+.box.agt-q { border-color:#f97316; border-width:2px; background:#431407; }
+.box.agt-q .title { color:#fdba74; }
+.box.agt-w { border-color:#3b82f6; border-width:2px; background:#172554; }
+.box.agt-w .title { color:#93c5fd; }
+.box.fn { border-color:#a78bfa; border-width:2px; background:#2e1065; }
+.box.fn .title { color:#c4b5fd; }
+.box.evt { border-color:#f97316; background:#431407; }
+.box.evt .title { color:#fdba74; }
+.arrow { text-align:center; color:#475569; font-size:18px; padding:2px 0; letter-spacing:4px; }
+.wide { max-width:100%; }
+</style></head><body>
+<div class="arch">
 
-    classDef src fill:#172554,stroke:#3b82f6,color:#93c5fd,stroke-width:2px
-    classDef store fill:#1e293b,stroke:#334155,color:#e2e8f0
-    classDef gw fill:#172554,stroke:#3b82f6,color:#93c5fd,stroke-width:2px
-    classDef agt fill:#052e16,stroke:#22c55e,color:#86efac,stroke-width:2px
-    classDef fn fill:#2e1065,stroke:#a78bfa,color:#c4b5fd,stroke-width:2px
-    classDef evt fill:#431407,stroke:#f97316,color:#fdba74,stroke-width:2px
-</pre>
+<div class="layer">
+  <div class="layer-label">☁️ DATA SOURCE</div>
+  <div class="row">
+    <div class="box src wide" style="max-width:100%">
+      <div class="icon">☁️</div>
+      <div class="title">Amazon Connect</div>
+      <div class="sub">CTR Records · Agent Events · Contact Lens Analysis</div>
+    </div>
+  </div>
+</div>
+<div class="arrow">▼</div>
+
+<div class="layer">
+  <div class="layer-label">💾 DATA PLATFORM</div>
+  <div class="row">
+    <div class="box"><div class="icon">📦</div><div class="title">S3 Data Lake</div><div class="sub">ctr/ · agent-events/ · contact-lens/</div></div>
+    <div class="box"><div class="icon">📚</div><div class="title">Glue Catalog</div><div class="sub">3 tables · schema-on-read</div></div>
+    <div class="box"><div class="icon">🔍</div><div class="title">Athena</div><div class="sub">SQL workgroup</div></div>
+    <div class="box"><div class="icon">🧠</div><div class="title">Knowledge Base</div><div class="sub">Bedrock RAG · SOPs</div></div>
+  </div>
+</div>
+<div class="arrow">▼</div>
+
+<div class="layer">
+  <div class="layer-label">🌐 CONTROL PLANE</div>
+  <div class="row">
+    <div class="box gw wide" style="max-width:100%">
+      <div class="icon">🌐</div>
+      <div class="title">AgentCore Gateway</div>
+      <div class="sub">Shared · Lambda type · Routes tool invocations</div>
+    </div>
+  </div>
+</div>
+<div class="arrow">▼</div>
+
+<div class="layer">
+  <div class="layer-label">🤖 AI AGENTS</div>
+  <div class="row">
+    <div class="box agt-s"><div class="icon">🟢</div><div class="title">Supervisor</div><div class="sub">Claude Sonnet 4 · 4 tools</div></div>
+    <div class="box agt-q"><div class="icon">🟠</div><div class="title">Quality</div><div class="sub">Claude Sonnet 4 · 3 tools</div></div>
+    <div class="box agt-w"><div class="icon">🔵</div><div class="title">WFM</div><div class="sub">Nova Lite 2 · 2 tools</div></div>
+  </div>
+</div>
+<div class="arrow">▼</div>
+
+<div class="layer">
+  <div class="layer-label">⚡ EXECUTION</div>
+  <div class="row">
+    <div class="box fn wide" style="max-width:100%">
+      <div class="icon">⚡</div>
+      <div class="title">Tool Handler Lambda</div>
+      <div class="sub">Docker · 9 tools · Dispatches by tool_name</div>
+    </div>
+  </div>
+</div>
+<div class="arrow">▼</div>
+
+<div class="layer">
+  <div class="layer-label">🚨 ALERT PIPELINE</div>
+  <div class="row">
+    <div class="box evt"><div class="icon">📡</div><div class="title">EventBridge</div><div class="sub">5 alert rules</div></div>
+    <div class="box evt"><div class="icon">📬</div><div class="title">SNS Topics</div><div class="sub">Per-type routing</div></div>
+    <div class="box evt"><div class="icon">💬</div><div class="title">Slack</div><div class="sub">Block Kit · 3 channels</div></div>
+  </div>
+</div>
+
+</div>
 </body></html>"""
-    components.html(mermaid_html, height=650, scrolling=False)
+    components.html(arch_svg, height=920, scrolling=False)
 
     st.write("")
     st.markdown("### CDK Stacks")
