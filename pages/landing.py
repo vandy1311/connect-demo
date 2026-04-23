@@ -185,43 +185,56 @@ with tab_arch:
     st.caption("Built on AWS with Bedrock AgentCore, CDK, Lambda, Athena, and EventBridge")
     st.write("")
 
-    _box = "background:#1e293b; border:1px solid #334155; border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem;"
-    _hl = "background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem; color:#60a5fa;"
-    _arrow = '<div style="text-align:center; color:#64748b; font-size:1.2rem; padding:4px 0;">↓</div>'
+    import streamlit.components.v1 as components
+    mermaid_html = """
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <div class="mermaid" style="display:flex; justify-content:center;">
+    graph TD
+        A["☁️ Amazon Connect<br/>CTR · Agent Events · Contact Lens"]:::source --> B["📦 S3 Data Lake"]:::data
 
-    # Layer 1: Connect
-    st.markdown(f'<div style="{_box}">☁️ Amazon Connect — CTR · Agent Events · Contact Lens</div>', unsafe_allow_html=True)
-    st.markdown(_arrow, unsafe_allow_html=True)
+        B --> C["📚 Glue Catalog<br/>3 tables"]:::data
+        B --> D["🔍 Athena<br/>Workgroup"]:::data
+        B --> E["🧠 Knowledge Base<br/>Bedrock RAG"]:::data
 
-    # Layer 2: Data
-    d1, d2, d3 = st.columns(3)
-    d1.markdown(f'<div style="{_box}">📦 S3 Data Lake</div>', unsafe_allow_html=True)
-    d2.markdown(f'<div style="{_box}">📚 Glue Catalog · 3 tables</div>', unsafe_allow_html=True)
-    d3.markdown(f'<div style="{_box}">🔍 Athena Workgroup</div>', unsafe_allow_html=True)
-    st.markdown(_arrow, unsafe_allow_html=True)
+        C --> F["🌐 AgentCore Gateway<br/>Shared · Lambda type"]:::gateway
+        D --> F
+        E --> F
 
-    # Layer 3: Gateway
-    st.markdown(f'<div style="{_hl}">🌐 AgentCore Gateway (shared · Lambda type)</div>', unsafe_allow_html=True)
-    st.markdown(_arrow, unsafe_allow_html=True)
+        F --> G["🟢 Supervisor<br/>Claude Sonnet 4 · 4 tools"]:::agent
+        F --> H["🟠 Quality<br/>Claude Sonnet 4 · 3 tools"]:::agent
+        F --> I["🔵 WFM<br/>Nova Lite 2 · 2 tools"]:::agent
 
-    # Layer 4: Agents
-    a1, a2, a3 = st.columns(3)
-    a1.markdown('<div style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.3); border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem; color:#34d399;">🟢 Supervisor<br><span style="font-size:0.7rem; color:#64748b;">Claude 4 · 4 tools</span></div>', unsafe_allow_html=True)
-    a2.markdown('<div style="background:rgba(251,146,60,0.08); border:1px solid rgba(251,146,60,0.3); border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem; color:#fb923c;">🟠 Quality<br><span style="font-size:0.7rem; color:#64748b;">Claude 4 · 3 tools</span></div>', unsafe_allow_html=True)
-    a3.markdown('<div style="background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.3); border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem; color:#60a5fa;">🔵 WFM<br><span style="font-size:0.7rem; color:#64748b;">Nova Lite · 2 tools</span></div>', unsafe_allow_html=True)
-    st.markdown(_arrow, unsafe_allow_html=True)
+        G --> J["⚡ Tool Lambda<br/>Docker · 9 tools"]:::lambda
+        H --> J
+        I --> J
 
-    # Layer 5: Lambda + KB
-    l1, l2 = st.columns(2)
-    l1.markdown(f'<div style="{_hl}">⚡ Tool Lambda · Docker · 9 tools</div>', unsafe_allow_html=True)
-    l2.markdown(f'<div style="{_box}">🧠 Knowledge Base · Bedrock RAG</div>', unsafe_allow_html=True)
-    st.markdown(_arrow, unsafe_allow_html=True)
+        J --> K["📡 EventBridge"]:::alert
+        K --> L["📬 SNS<br/>5 alert topics"]:::alert
+        L --> M["💬 Slack<br/>Block Kit · 3 channels"]:::alert
 
-    # Layer 6: Alerts
-    e1, e2, e3 = st.columns(3)
-    e1.markdown(f'<div style="{_box}">📡 EventBridge</div>', unsafe_allow_html=True)
-    e2.markdown(f'<div style="{_box}">📬 SNS · 5 topics</div>', unsafe_allow_html=True)
-    e3.markdown(f'<div style="{_box}">💬 Slack · 3 channels</div>', unsafe_allow_html=True)
+        classDef source fill:#1e293b,stroke:#3b82f6,color:#f1f5f9,stroke-width:2px
+        classDef data fill:#1e293b,stroke:#334155,color:#f1f5f9
+        classDef gateway fill:#172554,stroke:#3b82f6,color:#60a5fa,stroke-width:2px
+        classDef agent fill:#0f2a1e,stroke:#34d399,color:#34d399,stroke-width:2px
+        classDef lambda fill:#1a1040,stroke:#a78bfa,color:#c4b5fd,stroke-width:2px
+        classDef alert fill:#1e293b,stroke:#fb923c,color:#fb923c
+    </div>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#0f172a',
+                primaryColor: '#1e293b',
+                primaryTextColor: '#f1f5f9',
+                lineColor: '#475569',
+                fontSize: '14px'
+            }
+        });
+    </script>
+    """
+    components.html(mermaid_html, height=700, scrolling=False)
 
     st.write("")
     st.markdown("### CDK Stacks")
