@@ -186,55 +186,58 @@ with tab_arch:
     st.write("")
 
     import streamlit.components.v1 as components
-    mermaid_html = """
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-    <div class="mermaid" style="display:flex; justify-content:center;">
-    graph TD
-        A["☁️ Amazon Connect<br/>CTR · Agent Events · Contact Lens"]:::source --> B["📦 S3 Data Lake"]:::data
+    # Self-contained HTML with inline Mermaid (no external CDN)
+    mermaid_html = """<!DOCTYPE html>
+<html><head>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'dark',
+  themeVariables: {
+    darkMode: true,
+    background: '#0f172a',
+    primaryColor: '#1e293b',
+    primaryTextColor: '#f1f5f9',
+    primaryBorderColor: '#334155',
+    lineColor: '#475569',
+    secondaryColor: '#1e293b',
+    tertiaryColor: '#1e293b',
+    fontSize: '14px',
+    fontFamily: 'Inter, system-ui, sans-serif'
+  }
+});
+</script>
+</head>
+<body style="background:#0f172a; margin:0; display:flex; justify-content:center; padding:20px 0;">
+<pre class="mermaid">
+graph TD
+    A["☁️ Amazon Connect"]:::src --> B["📦 S3 Data Lake"]:::store
+    B --> C["📚 Glue Catalog"]:::store
+    B --> D["🔍 Athena"]:::store
+    B --> E["🧠 Knowledge Base"]:::store
+    C --> F["🌐 AgentCore Gateway"]:::gw
+    D --> F
+    E --> F
+    F --> G["🟢 Supervisor Agent"]:::agt
+    F --> H["🟠 Quality Agent"]:::agt
+    F --> I["🔵 WFM Agent"]:::agt
+    G --> J["⚡ Tool Lambda"]:::fn
+    H --> J
+    I --> J
+    J --> K["📡 EventBridge"]:::evt
+    K --> L["📬 SNS Topics"]:::evt
+    L --> M["💬 Slack"]:::evt
 
-        B --> C["📚 Glue Catalog<br/>3 tables"]:::data
-        B --> D["🔍 Athena<br/>Workgroup"]:::data
-        B --> E["🧠 Knowledge Base<br/>Bedrock RAG"]:::data
-
-        C --> F["🌐 AgentCore Gateway<br/>Shared · Lambda type"]:::gateway
-        D --> F
-        E --> F
-
-        F --> G["🟢 Supervisor<br/>Claude Sonnet 4 · 4 tools"]:::agent
-        F --> H["🟠 Quality<br/>Claude Sonnet 4 · 3 tools"]:::agent
-        F --> I["🔵 WFM<br/>Nova Lite 2 · 2 tools"]:::agent
-
-        G --> J["⚡ Tool Lambda<br/>Docker · 9 tools"]:::lambda
-        H --> J
-        I --> J
-
-        J --> K["📡 EventBridge"]:::alert
-        K --> L["📬 SNS<br/>5 alert topics"]:::alert
-        L --> M["💬 Slack<br/>Block Kit · 3 channels"]:::alert
-
-        classDef source fill:#1e293b,stroke:#3b82f6,color:#f1f5f9,stroke-width:2px
-        classDef data fill:#1e293b,stroke:#334155,color:#f1f5f9
-        classDef gateway fill:#172554,stroke:#3b82f6,color:#60a5fa,stroke-width:2px
-        classDef agent fill:#0f2a1e,stroke:#34d399,color:#34d399,stroke-width:2px
-        classDef lambda fill:#1a1040,stroke:#a78bfa,color:#c4b5fd,stroke-width:2px
-        classDef alert fill:#1e293b,stroke:#fb923c,color:#fb923c
-    </div>
-    <script>
-        mermaid.initialize({
-            startOnLoad: true,
-            theme: 'dark',
-            themeVariables: {
-                darkMode: true,
-                background: '#0f172a',
-                primaryColor: '#1e293b',
-                primaryTextColor: '#f1f5f9',
-                lineColor: '#475569',
-                fontSize: '14px'
-            }
-        });
-    </script>
-    """
-    components.html(mermaid_html, height=700, scrolling=False)
+    classDef src fill:#172554,stroke:#3b82f6,color:#93c5fd,stroke-width:2px
+    classDef store fill:#1e293b,stroke:#334155,color:#e2e8f0
+    classDef gw fill:#172554,stroke:#3b82f6,color:#93c5fd,stroke-width:2px
+    classDef agt fill:#052e16,stroke:#22c55e,color:#86efac,stroke-width:2px
+    classDef fn fill:#2e1065,stroke:#a78bfa,color:#c4b5fd,stroke-width:2px
+    classDef evt fill:#431407,stroke:#f97316,color:#fdba74,stroke-width:2px
+</pre>
+</body></html>"""
+    components.html(mermaid_html, height=650, scrolling=False)
 
     st.write("")
     st.markdown("### CDK Stacks")
