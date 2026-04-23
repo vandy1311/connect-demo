@@ -185,27 +185,43 @@ with tab_arch:
     st.caption("Built on AWS with Bedrock AgentCore, CDK, Lambda, Athena, and EventBridge")
     st.write("")
 
-    st.markdown("""
-```mermaid
-graph TD
-    A["☁️ Amazon Connect"] --> B["📦 S3 Data Lake"]
-    B --> C["📚 Glue Catalog · 3 tables"]
-    B --> D["🔍 Athena Workgroup"]
-    B --> E["🧠 Bedrock Knowledge Base"]
-    C --> F["🌐 AgentCore Gateway"]
-    D --> F
-    E --> F
-    F --> G["🟢 Supervisor · Claude 4 · 4 tools"]
-    F --> H["🟠 Quality · Claude 4 · 3 tools"]
-    F --> I["🔵 WFM · Nova Lite · 2 tools"]
-    G --> J["⚡ Tool Lambda · Docker · 9 tools"]
-    H --> J
-    I --> J
-    J --> K["📡 EventBridge"]
-    K --> L["📬 SNS · 5 alert topics"]
-    L --> M["💬 Slack · Block Kit · 3 channels"]
-```
-    """)
+    _box = "background:#1e293b; border:1px solid #334155; border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem;"
+    _hl = "background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem; color:#60a5fa;"
+    _arrow = '<div style="text-align:center; color:#64748b; font-size:1.2rem; padding:4px 0;">↓</div>'
+
+    # Layer 1: Connect
+    st.markdown(f'<div style="{_box}">☁️ Amazon Connect — CTR · Agent Events · Contact Lens</div>', unsafe_allow_html=True)
+    st.markdown(_arrow, unsafe_allow_html=True)
+
+    # Layer 2: Data
+    d1, d2, d3 = st.columns(3)
+    d1.markdown(f'<div style="{_box}">📦 S3 Data Lake</div>', unsafe_allow_html=True)
+    d2.markdown(f'<div style="{_box}">📚 Glue Catalog · 3 tables</div>', unsafe_allow_html=True)
+    d3.markdown(f'<div style="{_box}">🔍 Athena Workgroup</div>', unsafe_allow_html=True)
+    st.markdown(_arrow, unsafe_allow_html=True)
+
+    # Layer 3: Gateway
+    st.markdown(f'<div style="{_hl}">🌐 AgentCore Gateway (shared · Lambda type)</div>', unsafe_allow_html=True)
+    st.markdown(_arrow, unsafe_allow_html=True)
+
+    # Layer 4: Agents
+    a1, a2, a3 = st.columns(3)
+    a1.markdown('<div style="background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.3); border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem; color:#34d399;">🟢 Supervisor<br><span style="font-size:0.7rem; color:#64748b;">Claude 4 · 4 tools</span></div>', unsafe_allow_html=True)
+    a2.markdown('<div style="background:rgba(251,146,60,0.08); border:1px solid rgba(251,146,60,0.3); border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem; color:#fb923c;">🟠 Quality<br><span style="font-size:0.7rem; color:#64748b;">Claude 4 · 3 tools</span></div>', unsafe_allow_html=True)
+    a3.markdown('<div style="background:rgba(96,165,250,0.08); border:1px solid rgba(96,165,250,0.3); border-radius:8px; padding:10px 16px; text-align:center; font-size:0.85rem; color:#60a5fa;">🔵 WFM<br><span style="font-size:0.7rem; color:#64748b;">Nova Lite · 2 tools</span></div>', unsafe_allow_html=True)
+    st.markdown(_arrow, unsafe_allow_html=True)
+
+    # Layer 5: Lambda + KB
+    l1, l2 = st.columns(2)
+    l1.markdown(f'<div style="{_hl}">⚡ Tool Lambda · Docker · 9 tools</div>', unsafe_allow_html=True)
+    l2.markdown(f'<div style="{_box}">🧠 Knowledge Base · Bedrock RAG</div>', unsafe_allow_html=True)
+    st.markdown(_arrow, unsafe_allow_html=True)
+
+    # Layer 6: Alerts
+    e1, e2, e3 = st.columns(3)
+    e1.markdown(f'<div style="{_box}">📡 EventBridge</div>', unsafe_allow_html=True)
+    e2.markdown(f'<div style="{_box}">📬 SNS · 5 topics</div>', unsafe_allow_html=True)
+    e3.markdown(f'<div style="{_box}">💬 Slack · 3 channels</div>', unsafe_allow_html=True)
 
     st.write("")
     st.markdown("### CDK Stacks")
