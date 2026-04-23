@@ -15,28 +15,7 @@ div[data-testid="stMetric"] {
 .stTabs [data-baseweb="tab"] { font-weight: 600; font-size: 0.9rem; }
 </style>""", unsafe_allow_html=True)
 
-# ── Hero ──
-st.markdown("""<div style="text-align:center; padding:3rem 0 1.5rem;">
-<div style="display:inline-block; background:rgba(59,130,246,0.12); color:#3b82f6; font-size:0.75rem;
-font-weight:600; padding:5px 14px; border-radius:100px; margin-bottom:16px; border:1px solid rgba(59,130,246,0.2);">
-🚀 Bedrock AgentCore · Serverless · $34/month</div>
-<h1 style="font-size:2.6rem; font-weight:800; line-height:1.15; letter-spacing:-0.03em; margin:0;">
-Contact center analytics,<br>answered in seconds</h1>
-<p style="color:#94a3b8; font-size:1.05rem; line-height:1.7; margin:14px auto 0; max-width:560px;">
-Three AI agents query your Amazon Connect data lake and return actionable insights in natural language.</p>
-</div>""", unsafe_allow_html=True)
-
-# ── CTA ──
-_, c1, c2, _ = st.columns([1.2, 1, 1, 1.2])
-with c1:
-    if st.button("🎯 Launch Demo", use_container_width=True, type="primary"):
-        st.switch_page("pages/demo.py")
-with c2:
-    st.link_button("▶️ Watch Video", "https://youtu.be/r60EKVYHnDo", use_container_width=True)
-
-st.write("")
-
-# ── Tabs ──
+# ── Tabs at top ──
 tab_overview, tab_agents, tab_arch, tab_roi, tab_team = st.tabs(
     ["📊 Overview", "🤖 Agents", "🏗️ Architecture", "💰 ROI", "👥 Team"]
 )
@@ -45,6 +24,27 @@ tab_overview, tab_agents, tab_arch, tab_roi, tab_team = st.tabs(
 # 📊 OVERVIEW
 # ═══════════════════════════════════════════════════════════════
 with tab_overview:
+    # Hero
+    st.markdown("""<div style="text-align:center; padding:2rem 0 1.5rem;">
+    <div style="display:inline-block; background:rgba(59,130,246,0.12); color:#3b82f6; font-size:0.75rem;
+    font-weight:600; padding:5px 14px; border-radius:100px; margin-bottom:16px; border:1px solid rgba(59,130,246,0.2);">
+    🚀 Bedrock AgentCore · Serverless · $34/month</div>
+    <h1 style="font-size:2.6rem; font-weight:800; line-height:1.15; letter-spacing:-0.03em; margin:0;">
+    Contact center analytics,<br>answered in seconds</h1>
+    <p style="color:#94a3b8; font-size:1.05rem; line-height:1.7; margin:14px auto 0; max-width:560px;">
+    Three AI agents query your Amazon Connect data lake and return actionable insights in natural language.</p>
+    </div>""", unsafe_allow_html=True)
+
+    # CTA
+    _, c1, c2, _ = st.columns([1.2, 1, 1, 1.2])
+    with c1:
+        if st.button("🎯 Launch Demo", use_container_width=True, type="primary"):
+            st.switch_page("pages/demo.py")
+    with c2:
+        st.link_button("▶️ Watch Video", "https://youtu.be/r60EKVYHnDo", use_container_width=True)
+
+    st.write("")
+
     # Video
     st.markdown("""<div style="border-radius:12px; overflow:hidden; border:1px solid #334155; margin-bottom:1.5rem;">
     <iframe width="100%" height="420" src="https://www.youtube.com/embed/r60EKVYHnDo"
