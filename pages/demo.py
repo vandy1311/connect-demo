@@ -160,7 +160,7 @@ with st.sidebar:
     if st.button("🏠 Home", use_container_width=True, type="secondary"):
         st.switch_page("pages/landing.py")
     try:
-        st.image("diagrams/architecture.png", use_container_width=True)
+        pass  # architecture diagram not available in cloud deploy
     except Exception:
         st.caption("Architecture diagram")
     st.markdown("---")
@@ -1634,7 +1634,7 @@ with tab_deploy:
 with tab_arch:
     st.markdown("### 🏗️ System Architecture")
     try:
-        st.image("diagrams/architecture.png", use_container_width=True)
+        pass  # architecture diagram not available in cloud deploy
     except Exception:
         st.caption("Architecture diagram")
     st.markdown("---")
