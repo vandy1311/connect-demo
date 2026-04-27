@@ -801,7 +801,27 @@ def try_voice_synthesis(text: str) -> bytes | None:
     """Try Polly neural voice synthesis, return None if it fails."""
     try:
         import boto3
-        polly = boto3.client("polly", region_name="us-east-1")
+        import streamlit as _st_voice
+        # Explicitly pass credentials from st.secrets for Streamlit Cloud
+        aws_key = os.environ.get("AWS_ACCESS_KEY_ID", "")
+        aws_secret = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
+        region = os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
+        if not aws_key:
+            try:
+                aws_key = _st_voice.secrets.get("AWS_ACCESS_KEY_ID", "")
+                aws_secret = _st_voice.secrets.get("AWS_SECRET_ACCESS_KEY", "")
+                region = _st_voice.secrets.get("AWS_DEFAULT_REGION", "us-east-1")
+            except Exception:
+                pass
+        if aws_key and aws_secret:
+            polly = boto3.client(
+                "polly",
+                region_name=region,
+                aws_access_key_id=aws_key,
+                aws_secret_access_key=aws_secret,
+            )
+        else:
+            polly = boto3.client("polly", region_name="us-east-1")
         response = polly.synthesize_speech(
             Text=text[:3000],
             OutputFormat="mp3",
