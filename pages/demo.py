@@ -184,11 +184,7 @@ with st.sidebar:
     if voice_enabled:
         st.success("Voice ON", icon="🔊")
         if st.button("🔊 Test Voice Now", key="test_voice_btn"):
-            test_audio = try_voice_synthesis("Hello. Voice synthesis is working. This is the Connect Analytics Platform.")
-            if test_audio:
-                st.audio(test_audio, format="audio/mpeg")
-            else:
-                st.error("Polly failed — check error above")
+            st.session_state["_run_voice_test"] = True
     else:
         st.caption("Text-only mode")
 
@@ -839,6 +835,19 @@ def try_voice_synthesis(text: str) -> bytes | None:
         import streamlit as _st2
         _st2.warning(f"Voice error: {e}")
         return None
+
+
+# Run voice test if requested from sidebar button
+if st.session_state.get("_run_voice_test", False):
+    st.session_state["_run_voice_test"] = False
+    with st.sidebar:
+        with st.spinner("Testing Polly..."):
+            _test_audio = try_voice_synthesis("Hello. Voice synthesis is working.")
+            if _test_audio:
+                st.audio(_test_audio, format="audio/mpeg")
+                st.success("Voice works!")
+            else:
+                st.error("Polly failed")
 
 
 # ---------------------------------------------------------------------------
