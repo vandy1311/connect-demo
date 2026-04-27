@@ -182,9 +182,9 @@ with st.sidebar:
     st.markdown("### 🔊 Voice Output")
     voice_enabled = st.toggle("Enable Nova Sonic voice", value=False, key="voice_toggle")
     if voice_enabled:
-        st.caption("Agent responses will be spoken aloud via Nova Sonic on Bedrock")
+        st.success("Voice ON — next response will be spoken", icon="🔊")
     else:
-        st.caption("Text-only mode")
+        st.caption("Text-only mode — toggle to enable voice")
 
     st.markdown("---")
 
