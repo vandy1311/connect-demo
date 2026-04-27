@@ -809,7 +809,9 @@ def try_voice_synthesis(text: str) -> bytes | None:
             Engine="neural",
         )
         return response["AudioStream"].read()
-    except Exception:
+    except Exception as e:
+        import streamlit as _st2
+        _st2.warning(f"Voice error: {e}")
         return None
 
 
@@ -1062,7 +1064,7 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
                 if audio_bytes:
                     msg_data["audio"] = audio_bytes
                 else:
-                    st.caption("Voice unavailable — check AWS credentials")
+                    st.warning("🔊 Voice unavailable — check AWS credentials in Streamlit secrets")
 
         # Fire alert if present
         if "alert" in response:
