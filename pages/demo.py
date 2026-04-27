@@ -182,9 +182,15 @@ with st.sidebar:
     st.markdown("### 🔊 Voice Output")
     voice_enabled = st.toggle("Enable Nova Sonic voice", value=False, key="voice_toggle")
     if voice_enabled:
-        st.success("Voice ON — next response will be spoken", icon="🔊")
+        st.success("Voice ON", icon="🔊")
+        if st.button("🔊 Test Voice Now", key="test_voice_btn"):
+            test_audio = try_voice_synthesis("Hello. Voice synthesis is working. This is the Connect Analytics Platform.")
+            if test_audio:
+                st.audio(test_audio, format="audio/mpeg")
+            else:
+                st.error("Polly failed — check error above")
     else:
-        st.caption("Text-only mode — toggle to enable voice")
+        st.caption("Text-only mode")
 
     st.markdown("---")
 
