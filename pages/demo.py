@@ -35,6 +35,11 @@ try:
     import streamlit as _st
     if not SLACK_WEBHOOK_URL or "YOUR" in SLACK_WEBHOOK_URL:
         SLACK_WEBHOOK_URL = _st.secrets.get("SLACK_WEBHOOK_URL", SLACK_WEBHOOK_URL)
+    # Load AWS credentials from secrets into env vars for boto3
+    for _key in ("AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_DEFAULT_REGION"):
+        _val = _st.secrets.get(_key, "")
+        if _val:
+            os.environ[_key] = _val
 except Exception:
     pass
 
