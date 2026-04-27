@@ -956,6 +956,8 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
                     cols[i].metric(m["label"], m["value"], m.get("delta", ""))
             if "audio" in msg:
                 st.audio(msg["audio"], format="audio/mpeg")
+            if msg.get("voice_error"):
+                st.warning("🔊 Voice synthesis failed — check AWS credentials in Streamlit secrets")
             if "transcript_audio" in msg:
                 st.markdown("---")
                 st.markdown("**Call transcript recordings:**")
