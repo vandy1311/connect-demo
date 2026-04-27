@@ -918,6 +918,12 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
                                 msg_data["actions"] = response["actions"]
                             if "transcript_audio" in response:
                                 msg_data["transcript_audio"] = response["transcript_audio"]
+                            # Voice synthesis if enabled
+                            if st.session_state.get("voice_toggle", False):
+                                with st.spinner("🔊 Generating voice..."):
+                                    audio_bytes = try_voice_synthesis(response["text"])
+                                    if audio_bytes:
+                                        msg_data["audio"] = audio_bytes
                             if "alert" in response:
                                 alert = response["alert"]
                                 alert["time"] = datetime.now(timezone.utc).strftime("%H:%M:%S UTC")
