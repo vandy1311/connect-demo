@@ -30,6 +30,14 @@ if _env_file.exists():
             if k.strip() == "SLACK_WEBHOOK_URL" and v.strip():
                 SLACK_WEBHOOK_URL = v.strip()
 
+# Also check Streamlit secrets (for Streamlit Cloud deployment)
+try:
+    import streamlit as _st
+    if not SLACK_WEBHOOK_URL or "YOUR" in SLACK_WEBHOOK_URL:
+        SLACK_WEBHOOK_URL = _st.secrets.get("SLACK_WEBHOOK_URL", SLACK_WEBHOOK_URL)
+except Exception:
+    pass
+
 
 def post_to_slack(alert: dict) -> bool:
     """Post an alert to Slack via webhook. Returns True on success."""
