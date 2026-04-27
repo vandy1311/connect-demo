@@ -964,7 +964,7 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
                 for ta in msg["transcript_audio"]:
                     with st.expander(f"Listen: {ta['label']}"):
                         st.caption(f'"{ta["text"]}"')
-                        audio_path = Path(__file__).parent / ta["file"]
+                        audio_path = Path(__file__).parent.parent / ta["file"]
                         if audio_path.exists():
                             st.audio(str(audio_path), format="audio/mpeg")
                         else:
