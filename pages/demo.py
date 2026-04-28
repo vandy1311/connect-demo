@@ -182,6 +182,20 @@ st.markdown("""
 with st.sidebar:
     if st.button("🏠 Home", use_container_width=True, type="secondary"):
         st.switch_page("pages/landing.py")
+
+    st.markdown("---")
+
+    # Mode toggle
+    st.markdown("### ⚡ Data Mode")
+    live_mode = st.toggle("Live Data", value=_LIVE_MODE, key="live_mode_toggle",
+                          help="ON = Real SQL queries over 70K records via DuckDB\nOFF = Canned demo responses")
+    if live_mode and _LIVE_MODE:
+        st.success("🟢 LIVE — querying 70K records", icon="⚡")
+    elif live_mode and not _LIVE_MODE:
+        st.warning("DuckDB not available — using demo mode")
+        live_mode = False
+    else:
+        st.info("📋 DEMO — canned responses")
     try:
         pass  # architecture diagram not available in cloud deploy
     except Exception:
@@ -239,9 +253,9 @@ with st.sidebar:
 # ---------------------------------------------------------------------------
 st.markdown("""
 <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:32px; margin-bottom:20px; text-align:center;">
-    <div style="display:inline-block; background:rgba(52,211,153,0.12); color:#34d399; font-size:0.75rem;
-                font-weight:600; padding:4px 12px; border-radius:100px; margin-bottom:16px; border:1px solid rgba(52,211,153,0.2);">
-        🟢 LIVE DATA &middot; DuckDB over 70K synthetic records &middot; Bedrock AgentCore
+    <div style="display:inline-block; background:rgba(59,130,246,0.12); color:#3b82f6; font-size:0.75rem;
+                font-weight:600; padding:4px 12px; border-radius:100px; margin-bottom:16px; border:1px solid rgba(59,130,246,0.2);">
+        Bedrock AgentCore &middot; Serverless &middot; Toggle Live/Demo in sidebar
     </div>
     <h1 style="font-size:2rem; font-weight:800; letter-spacing:-0.03em; margin:0 0 8px 0; color:#f1f5f9;">
         Connect Analytics Platform
@@ -948,7 +962,7 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
                             st.session_state[key].append({"role": "user", "content": p["prompt"]})
                             with st.spinner(f"{agent_name} Agent thinking..."):
                                 time.sleep(1.2)
-                                response = live_agent_response(agent_name, p["prompt"]) if _LIVE_MODE else simulate_agent_response(agent_name, p["prompt"])
+                                response = live_agent_response(agent_name, p["prompt"]) if (st.session_state.get("live_mode_toggle", False) and _LIVE_MODE) else simulate_agent_response(agent_name, p["prompt"])
                                 response = enrich_with_kb(response, p["prompt"])
                             msg_data = {"role": "agent", "content": response["text"]}
                             if "kb_docs" in response:
@@ -1081,7 +1095,7 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
 
         with st.spinner(f"{agent_emoji} {agent_name} Agent thinking..."):
             time.sleep(1.2)  # Simulate latency
-            response = live_agent_response(agent_name, query) if _LIVE_MODE else simulate_agent_response(agent_name, query)
+            response = live_agent_response(agent_name, query) if (st.session_state.get('live_mode_toggle', False) and _LIVE_MODE) else simulate_agent_response(agent_name, query)
             response = enrich_with_kb(response, query)
 
         msg_data = {"role": "agent", "content": response["text"]}
