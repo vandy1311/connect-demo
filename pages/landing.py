@@ -176,6 +176,21 @@ line{stroke:#475569;stroke-width:1.5;marker-end:url(#arrow)}
 
     st.write("")
 
+    # Lambda tool registry
+    st.markdown("### 9 Tools — One Lambda")
+    t1, t2, t3 = st.columns(3)
+    with t1:
+        st.markdown("**🟢 Supervisor (4)**")
+        st.code("get_queue_health\nget_abandonment_analysis\nget_agent_utilization\ntrigger_sla_alert", language=None)
+    with t2:
+        st.markdown("**🟠 Quality (3)**")
+        st.code("get_sentiment_trends\nget_coaching_recommendations\nget_compliance_violations", language=None)
+    with t3:
+        st.markdown("**🔵 WFM (2)**")
+        st.code("get_staffing_forecast\nget_burnout_signals", language=None)
+
+    st.write("")
+
     # Before / After
     st.markdown("### Before vs After")
     b1, b2 = st.columns(2)
