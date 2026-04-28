@@ -121,11 +121,11 @@ def get_abandonment_analysis(queue_name: str | None = None) -> dict:
         COUNT(*) as total_abandoned,
         (SELECT COUNT(*) FROM read_parquet('{CTR_PATH}', hive_partitioning=true)) as total_contacts,
         ROUND(AVG(queue_duration_seconds), 2) as avg_wait_before_abandon,
-        EXTRACT(HOUR FROM initiation_timestamp) as peak_hour,
+        EXTRACT(HOUR FROM CAST(initiation_timestamp AS TIMESTAMP)) as peak_hour,
         COUNT(*) as hour_count
     FROM read_parquet('{CTR_PATH}', hive_partitioning=true)
     {where}
-    GROUP BY EXTRACT(HOUR FROM initiation_timestamp)
+    GROUP BY EXTRACT(HOUR FROM CAST(initiation_timestamp AS TIMESTAMP))
     ORDER BY hour_count DESC
     LIMIT 1
     """
@@ -294,11 +294,11 @@ def get_staffing_forecast() -> dict:
     """Live query: hourly volume patterns for forecasting."""
     sql = f"""
     SELECT
-        EXTRACT(HOUR FROM initiation_timestamp) as hour,
+        EXTRACT(HOUR FROM CAST(initiation_timestamp AS TIMESTAMP)) as hour,
         COUNT(*) as volume,
         ROUND(AVG(handle_time_seconds), 0) as avg_handle_time
     FROM read_parquet('{CTR_PATH}', hive_partitioning=true)
-    GROUP BY EXTRACT(HOUR FROM initiation_timestamp)
+    GROUP BY EXTRACT(HOUR FROM CAST(initiation_timestamp AS TIMESTAMP))
     ORDER BY hour
     """
     rows = _query(sql)
@@ -315,7 +315,15 @@ def get_staffing_forecast() -> dict:
 
 
 def live_agent_response(agent: str, query: str) -> dict:
-    """Route a query to the appropriate live data function."""
+    """Route a query to the appropriate live data function.
+    Falls back gracefully if any query fails."""
+    try:
+        return _live_agent_response_inner(agent, query)
+    except Exception as e:
+        return {"text": f"**Live query error:** {e}\n\n_Falling back would require demo mode toggle._"}
+
+
+def _live_agent_response_inner(agent: str, query: str) -> dict:
     q = query.lower()
 
     if agent == "Supervisor":
