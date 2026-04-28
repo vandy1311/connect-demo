@@ -91,46 +91,88 @@ with tab_overview:
 
     st.write("")
 
-    # Architecture overview
+    # Architecture flowchart
     st.markdown("### Architecture")
     import streamlit.components.v1 as components
-    overview_arch = """<!DOCTYPE html>
+    flow_html = """<!DOCTYPE html>
 <html><head><style>
-body{margin:0;background:#0f172a;font-family:Inter,system-ui,sans-serif}
-.a{max-width:780px;margin:0 auto;padding:16px}
-.r{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:2px}
-.b{background:#1e293b;border:1px solid #334155;border-radius:8px;padding:10px 14px;text-align:center;flex:1;min-width:100px;max-width:220px}
-.b .i{font-size:16px;margin-bottom:2px}
-.b .t{font-size:11px;font-weight:700;color:#f1f5f9}
-.b .s{font-size:9px;color:#64748b;margin-top:1px}
-.b.hi{border-color:#3b82f6;background:#172554}.b.hi .t{color:#93c5fd}
-.b.ag{border-color:#22c55e;background:#052e16}.b.ag .t{color:#86efac}
-.b.aq{border-color:#f97316;background:#431407}.b.aq .t{color:#fdba74}
-.b.ab{border-color:#3b82f6;background:#172554}.b.ab .t{color:#93c5fd}
-.b.fn{border-color:#a78bfa;background:#2e1065}.b.fn .t{color:#c4b5fd}
-.b.ev{border-color:#f97316;background:#431407}.b.ev .t{color:#fdba74}
-.ar{text-align:center;color:#475569;font-size:14px;padding:1px 0}
-.lb{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#475569;padding:4px 8px;margin-bottom:3px}
-</style></head><body><div class="a">
-<div class="lb">DATA SOURCE</div>
-<div class="r"><div class="b hi" style="max-width:100%"><div class="i">☁️</div><div class="t">Amazon Connect</div><div class="s">CTR · Agent Events · Contact Lens</div></div></div>
-<div class="ar">▼</div>
-<div class="lb">DATA PLATFORM</div>
-<div class="r"><div class="b"><div class="i">📦</div><div class="t">S3</div></div><div class="b"><div class="i">📚</div><div class="t">Glue</div></div><div class="b"><div class="i">🔍</div><div class="t">Athena</div></div><div class="b"><div class="i">🧠</div><div class="t">KB</div></div></div>
-<div class="ar">▼</div>
-<div class="lb">AGENTCORE</div>
-<div class="r"><div class="b hi" style="max-width:100%"><div class="i">🌐</div><div class="t">Gateway</div><div class="s">Shared · Lambda type</div></div></div>
-<div class="ar">▼</div>
-<div class="lb">AI AGENTS</div>
-<div class="r"><div class="b ag"><div class="i">🟢</div><div class="t">Supervisor</div><div class="s">Claude 4</div></div><div class="b aq"><div class="i">🟠</div><div class="t">Quality</div><div class="s">Claude 4</div></div><div class="b ab"><div class="i">🔵</div><div class="t">WFM</div><div class="s">Nova Lite</div></div></div>
-<div class="ar">▼</div>
-<div class="lb">EXECUTION</div>
-<div class="r"><div class="b fn" style="max-width:100%"><div class="i">⚡</div><div class="t">Tool Lambda</div><div class="s">Docker · 9 tools</div></div></div>
-<div class="ar">▼</div>
-<div class="lb">ALERTS</div>
-<div class="r"><div class="b ev"><div class="i">📡</div><div class="t">EventBridge</div></div><div class="b ev"><div class="i">📬</div><div class="t">SNS</div></div><div class="b ev"><div class="i">💬</div><div class="t">Slack</div></div></div>
-</div></body></html>"""
-    components.html(overview_arch, height=520, scrolling=False)
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f172a;font-family:Inter,system-ui,sans-serif}
+.flow{position:relative;width:760px;margin:0 auto;padding:20px 0}
+.node{position:absolute;border-radius:10px;padding:10px 16px;text-align:center;z-index:2}
+.node .label{font-size:12px;font-weight:700;color:#f1f5f9}
+.node .sub{font-size:9px;color:#94a3b8;margin-top:2px}
+.n-src{background:#172554;border:2px solid #3b82f6;width:280px;left:240px;top:0}
+.n-src .label{color:#93c5fd}
+.n-s3{background:#1e293b;border:1px solid #334155;width:130px;left:100px;top:80px}
+.n-glue{background:#1e293b;border:1px solid #334155;width:130px;left:240px;top:80px}
+.n-ath{background:#1e293b;border:1px solid #334155;width:130px;left:380px;top:80px}
+.n-kb{background:#1e293b;border:1px solid #334155;width:130px;left:520px;top:80px}
+.n-gw{background:#172554;border:2px solid #3b82f6;width:280px;left:240px;top:160px}
+.n-gw .label{color:#93c5fd}
+.n-sup{background:#052e16;border:2px solid #22c55e;width:150px;left:80px;top:240px}
+.n-sup .label{color:#86efac}
+.n-qual{background:#431407;border:2px solid #f97316;width:150px;left:305px;top:240px}
+.n-qual .label{color:#fdba74}
+.n-wfm{background:#172554;border:2px solid #3b82f6;width:150px;left:530px;top:240px}
+.n-wfm .label{color:#93c5fd}
+.n-lambda{background:#2e1065;border:2px solid #a78bfa;width:280px;left:240px;top:330px}
+.n-lambda .label{color:#c4b5fd}
+.n-eb{background:#431407;border:1px solid #f97316;width:130px;left:100px;top:410px}
+.n-eb .label{color:#fdba74}
+.n-sns{background:#431407;border:1px solid #f97316;width:130px;left:315px;top:410px}
+.n-sns .label{color:#fdba74}
+.n-slack{background:#431407;border:1px solid #f97316;width:130px;left:530px;top:410px}
+.n-slack .label{color:#fdba74}
+svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+line{stroke:#475569;stroke-width:1.5;marker-end:url(#arrow)}
+</style></head><body>
+<div class="flow" style="height:470px">
+<svg viewBox="0 0 760 470">
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/></marker></defs>
+  <!-- Connect to data layer -->
+  <line x1="310" y1="38" x2="165" y2="80"/>
+  <line x1="350" y1="38" x2="305" y2="80"/>
+  <line x1="420" y1="38" x2="445" y2="80"/>
+  <line x1="460" y1="38" x2="585" y2="80"/>
+  <!-- Data to gateway -->
+  <line x1="165" y1="115" x2="340" y2="160"/>
+  <line x1="305" y1="115" x2="360" y2="160"/>
+  <line x1="445" y1="115" x2="400" y2="160"/>
+  <line x1="585" y1="115" x2="420" y2="160"/>
+  <!-- Gateway to agents -->
+  <line x1="310" y1="198" x2="155" y2="240"/>
+  <line x1="380" y1="198" x2="380" y2="240"/>
+  <line x1="450" y1="198" x2="605" y2="240"/>
+  <!-- Agents to lambda -->
+  <line x1="155" y1="278" x2="340" y2="330"/>
+  <line x1="380" y1="278" x2="380" y2="330"/>
+  <line x1="605" y1="278" x2="420" y2="330"/>
+  <!-- Lambda to alerts -->
+  <line x1="310" y1="368" x2="165" y2="410"/>
+  <line x1="380" y1="368" x2="380" y2="410"/>
+  <line x1="450" y1="368" x2="595" y2="410"/>
+  <!-- SNS to Slack -->
+  <line x1="445" y1="430" x2="530" y2="430"/>
+  <!-- EB to SNS -->
+  <line x1="230" y1="430" x2="315" y2="430"/>
+</svg>
+<div class="node n-src"><div class="label">☁️ Amazon Connect</div><div class="sub">CTR · Agent Events · Contact Lens</div></div>
+<div class="node n-s3"><div class="label">📦 S3</div><div class="sub">Data Lake</div></div>
+<div class="node n-glue"><div class="label">📚 Glue</div><div class="sub">3 tables</div></div>
+<div class="node n-ath"><div class="label">🔍 Athena</div><div class="sub">SQL queries</div></div>
+<div class="node n-kb"><div class="label">🧠 KB</div><div class="sub">Bedrock RAG</div></div>
+<div class="node n-gw"><div class="label">🌐 AgentCore Gateway</div><div class="sub">Shared · Routes tool invocations</div></div>
+<div class="node n-sup"><div class="label">🟢 Supervisor</div><div class="sub">Claude 4 · 4 tools</div></div>
+<div class="node n-qual"><div class="label">🟠 Quality</div><div class="sub">Claude 4 · 3 tools</div></div>
+<div class="node n-wfm"><div class="label">🔵 WFM</div><div class="sub">Nova Lite · 2 tools</div></div>
+<div class="node n-lambda"><div class="label">⚡ Tool Handler Lambda</div><div class="sub">Docker · 9 tools · Dispatches by tool_name</div></div>
+<div class="node n-eb"><div class="label">📡 EventBridge</div><div class="sub">5 rules</div></div>
+<div class="node n-sns"><div class="label">📬 SNS</div><div class="sub">5 topics</div></div>
+<div class="node n-slack"><div class="label">💬 Slack</div><div class="sub">3 channels</div></div>
+</div>
+</body></html>"""
+    components.html(flow_html, height=500, scrolling=False)
 
     st.write("")
 
