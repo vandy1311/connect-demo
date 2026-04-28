@@ -15,6 +15,16 @@ from urllib.parse import quote as url_quote
 
 import streamlit as st
 
+# Live query engine — DuckDB over Parquet
+try:
+    import sys
+    from pathlib import Path as _P
+    sys.path.insert(0, str(_P(__file__).parent.parent))
+    from live_query import live_agent_response
+    _LIVE_MODE = True
+except ImportError:
+    _LIVE_MODE = False
+
 # ---------------------------------------------------------------------------
 # Slack integration
 # ---------------------------------------------------------------------------
@@ -229,9 +239,9 @@ with st.sidebar:
 # ---------------------------------------------------------------------------
 st.markdown("""
 <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:32px; margin-bottom:20px; text-align:center;">
-    <div style="display:inline-block; background:rgba(59,130,246,0.12); color:#3b82f6; font-size:0.75rem;
-                font-weight:600; padding:4px 12px; border-radius:100px; margin-bottom:16px; border:1px solid rgba(59,130,246,0.2);">
-        Bedrock AgentCore &middot; Serverless
+    <div style="display:inline-block; background:rgba(52,211,153,0.12); color:#34d399; font-size:0.75rem;
+                font-weight:600; padding:4px 12px; border-radius:100px; margin-bottom:16px; border:1px solid rgba(52,211,153,0.2);">
+        🟢 LIVE DATA &middot; DuckDB over 70K synthetic records &middot; Bedrock AgentCore
     </div>
     <h1 style="font-size:2rem; font-weight:800; letter-spacing:-0.03em; margin:0 0 8px 0; color:#f1f5f9;">
         Connect Analytics Platform
@@ -938,7 +948,7 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
                             st.session_state[key].append({"role": "user", "content": p["prompt"]})
                             with st.spinner(f"{agent_name} Agent thinking..."):
                                 time.sleep(1.2)
-                                response = simulate_agent_response(agent_name, p["prompt"])
+                                response = live_agent_response(agent_name, p["prompt"]) if _LIVE_MODE else simulate_agent_response(agent_name, p["prompt"])
                                 response = enrich_with_kb(response, p["prompt"])
                             msg_data = {"role": "agent", "content": response["text"]}
                             if "kb_docs" in response:
@@ -1071,7 +1081,7 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
 
         with st.spinner(f"{agent_emoji} {agent_name} Agent thinking..."):
             time.sleep(1.2)  # Simulate latency
-            response = simulate_agent_response(agent_name, query)
+            response = live_agent_response(agent_name, query) if _LIVE_MODE else simulate_agent_response(agent_name, query)
             response = enrich_with_kb(response, query)
 
         msg_data = {"role": "agent", "content": response["text"]}
