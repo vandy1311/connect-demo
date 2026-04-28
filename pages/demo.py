@@ -1828,9 +1828,34 @@ line{stroke:#475569;stroke-width:1.5;marker-end:url(#arrow)}
     with st.expander("🟢 Supervisor Agent — Claude Sonnet 4", expanded=False):
         st.markdown("""
 **Data Flow:**
-```
-Amazon Connect → S3 (CTR + Agent Events) → Athena → AgentCore Gateway → Supervisor Agent → Tool Lambda
-```
+        """)
+        import streamlit.components.v1 as _fc
+        _fc.html("""<!DOCTYPE html><html><head><style>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;font-family:Inter,system-ui,sans-serif}
+.mf{position:relative;width:720px;margin:0 auto;height:65px}
+.mn{position:absolute;border-radius:8px;padding:7px 10px;text-align:center;z-index:2;width:108px;top:12px}
+.mn .t{font-size:10px;font-weight:700;color:#f1f5f9}.mn .s{font-size:8px;color:#94a3b8}
+.bl{background:#172554;border:1.5px solid #3b82f6}.bl .t{color:#93c5fd}
+.gr{background:#052e16;border:1.5px solid #22c55e}.gr .t{color:#86efac}
+.gy{background:#1e293b;border:1px solid #334155}
+.pr{background:#2e1065;border:1.5px solid #a78bfa}.pr .t{color:#c4b5fd}
+.or{background:#431407;border:1.5px solid #f97316}.or .t{color:#fdba74}
+svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+line{stroke:#475569;stroke-width:1.5;marker-end:url(#a)}
+</style></head><body><div class="mf">
+<svg viewBox="0 0 720 65"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#475569"/></marker></defs>
+<line x1="108" y1="32" x2="120" y2="32"/><line x1="228" y1="32" x2="240" y2="32"/>
+<line x1="348" y1="32" x2="360" y2="32"/><line x1="468" y1="32" x2="480" y2="32"/>
+<line x1="588" y1="32" x2="600" y2="32"/>
+</svg>
+<div class="mn bl" style="left:0"><div class="t">☁️ Connect</div><div class="s">CTR + Events</div></div>
+<div class="mn gy" style="left:120px"><div class="t">📦 S3</div><div class="s">Data Lake</div></div>
+<div class="mn gy" style="left:240px"><div class="t">🔍 Athena</div><div class="s">SQL Query</div></div>
+<div class="mn bl" style="left:360px"><div class="t">🌐 Gateway</div><div class="s">AgentCore</div></div>
+<div class="mn gr" style="left:480px"><div class="t">🟢 Supervisor</div><div class="s">Claude 4</div></div>
+<div class="mn pr" style="left:600px"><div class="t">⚡ Lambda</div><div class="s">4 tools</div></div>
+</div></body></html>""", height=70, scrolling=False)
+        st.markdown("""
 
 | Tool | What it does | Data Source | Output |
 |------|-------------|-------------|--------|
@@ -1845,9 +1870,33 @@ Amazon Connect → S3 (CTR + Agent Events) → Athena → AgentCore Gateway → 
     with st.expander("🟠 Quality Agent — Claude Sonnet 4", expanded=False):
         st.markdown("""
 **Data Flow:**
-```
-Amazon Connect → S3 (Contact Lens) → Athena → AgentCore Gateway → Quality Agent → Tool Lambda
-```
+        """)
+        import streamlit.components.v1 as _fc
+        _fc.html("""<!DOCTYPE html><html><head><style>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;font-family:Inter,system-ui,sans-serif}
+.mf{position:relative;width:720px;margin:0 auto;height:65px}
+.mn{position:absolute;border-radius:8px;padding:7px 10px;text-align:center;z-index:2;width:108px;top:12px}
+.mn .t{font-size:10px;font-weight:700;color:#f1f5f9}.mn .s{font-size:8px;color:#94a3b8}
+.bl{background:#172554;border:1.5px solid #3b82f6}.bl .t{color:#93c5fd}
+.or{background:#431407;border:1.5px solid #f97316}.or .t{color:#fdba74}
+.gy{background:#1e293b;border:1px solid #334155}
+.pr{background:#2e1065;border:1.5px solid #a78bfa}.pr .t{color:#c4b5fd}
+svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+line{stroke:#475569;stroke-width:1.5;marker-end:url(#a)}
+</style></head><body><div class="mf">
+<svg viewBox="0 0 720 65"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#475569"/></marker></defs>
+<line x1="108" y1="32" x2="120" y2="32"/><line x1="228" y1="32" x2="240" y2="32"/>
+<line x1="348" y1="32" x2="360" y2="32"/><line x1="468" y1="32" x2="480" y2="32"/>
+<line x1="588" y1="32" x2="600" y2="32"/>
+</svg>
+<div class="mn bl" style="left:0"><div class="t">☁️ Connect</div><div class="s">Contact Lens</div></div>
+<div class="mn gy" style="left:120px"><div class="t">📦 S3</div><div class="s">Data Lake</div></div>
+<div class="mn gy" style="left:240px"><div class="t">🔍 Athena</div><div class="s">SQL Query</div></div>
+<div class="mn bl" style="left:360px"><div class="t">🌐 Gateway</div><div class="s">AgentCore</div></div>
+<div class="mn or" style="left:480px"><div class="t">🟠 Quality</div><div class="s">Claude 4</div></div>
+<div class="mn pr" style="left:600px"><div class="t">⚡ Lambda</div><div class="s">3 tools</div></div>
+</div></body></html>""", height=70, scrolling=False)
+        st.markdown("""
 
 | Tool | What it does | Data Source | Output |
 |------|-------------|-------------|--------|
@@ -1861,9 +1910,32 @@ Amazon Connect → S3 (Contact Lens) → Athena → AgentCore Gateway → Qualit
     with st.expander("🔵 WFM Agent — Nova Lite v2 (50× cheaper)", expanded=False):
         st.markdown("""
 **Data Flow:**
-```
-Amazon Connect → S3 (CTR + Agent Events) → Athena → AgentCore Gateway → WFM Agent → Tool Lambda
-```
+        """)
+        import streamlit.components.v1 as _fc
+        _fc.html("""<!DOCTYPE html><html><head><style>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#0f172a;font-family:Inter,system-ui,sans-serif}
+.mf{position:relative;width:720px;margin:0 auto;height:65px}
+.mn{position:absolute;border-radius:8px;padding:7px 10px;text-align:center;z-index:2;width:108px;top:12px}
+.mn .t{font-size:10px;font-weight:700;color:#f1f5f9}.mn .s{font-size:8px;color:#94a3b8}
+.bl{background:#172554;border:1.5px solid #3b82f6}.bl .t{color:#93c5fd}
+.gy{background:#1e293b;border:1px solid #334155}
+.pr{background:#2e1065;border:1.5px solid #a78bfa}.pr .t{color:#c4b5fd}
+svg{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+line{stroke:#475569;stroke-width:1.5;marker-end:url(#a)}
+</style></head><body><div class="mf">
+<svg viewBox="0 0 720 65"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#475569"/></marker></defs>
+<line x1="108" y1="32" x2="120" y2="32"/><line x1="228" y1="32" x2="240" y2="32"/>
+<line x1="348" y1="32" x2="360" y2="32"/><line x1="468" y1="32" x2="480" y2="32"/>
+<line x1="588" y1="32" x2="600" y2="32"/>
+</svg>
+<div class="mn bl" style="left:0"><div class="t">☁️ Connect</div><div class="s">CTR + Events</div></div>
+<div class="mn gy" style="left:120px"><div class="t">📦 S3</div><div class="s">Data Lake</div></div>
+<div class="mn gy" style="left:240px"><div class="t">🔍 Athena</div><div class="s">SQL Query</div></div>
+<div class="mn bl" style="left:360px"><div class="t">🌐 Gateway</div><div class="s">AgentCore</div></div>
+<div class="mn bl" style="left:480px"><div class="t">🔵 WFM</div><div class="s">Nova Lite</div></div>
+<div class="mn pr" style="left:600px"><div class="t">⚡ Lambda</div><div class="s">2 tools</div></div>
+</div></body></html>""", height=70, scrolling=False)
+        st.markdown("""
 
 | Tool | What it does | Data Source | Output |
 |------|-------------|-------------|--------|
