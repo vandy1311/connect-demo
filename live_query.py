@@ -5,36 +5,17 @@ Uses the same SQL patterns as the Lambda tools but via DuckDB instead of Athena.
 """
 
 import os
-import random
-import time
-from datetime import datetime, timezone
 from pathlib import Path
 
 import duckdb
 
-# Real-time simulation seed — changes every 30 seconds for "live" feel
-_RT_SEED = int(time.time() // 30)
-random.seed(_RT_SEED)
-
-def _rt_jitter(base: float, pct: float = 0.15) -> float:
-    """Add realistic jitter to a value (±pct%)."""
-    return round(base * (1 + random.uniform(-pct, pct)), 2)
-
-def _rt_int_jitter(base: int, pct: float = 0.2) -> int:
-    """Add jitter to an integer value."""
-    return max(0, int(base * (1 + random.uniform(-pct, pct))))
-
-def _now_str() -> str:
-    return datetime.now(timezone.utc).strftime("%H:%M:%S UTC")
-
 # Auto-detect data directory
 _DATA_DIR = os.environ.get("DATA_DIR", "")
 if not _DATA_DIR:
-    # Try common locations
     for candidate in [
-        Path(__file__).parent.parent.parent / "output",  # repo root/output
-        Path("/Users/vtewanie/AIDLC/output"),
+        Path(__file__).parent / "output",  # same dir as live_query.py
         Path("/mount/src/connect-demo/output"),
+        Path(__file__).parent.parent / "output",
     ]:
         if candidate.exists():
             _DATA_DIR = str(candidate)
@@ -91,8 +72,8 @@ def get_queue_health(queue_name: str | None = None, time_range: str = "24h") -> 
     """
     rows = _query(sql)
 
-    # Add real-time "current" stats on top of historical
-    lines = [f"**Queue Health — Live at {_now_str()}**\n"]
+    # Format response
+    lines = ["**Queue Health (Live Data)**\n"]
     lines.append("| Queue | Contacts | Longest Wait | SLA % | Avg Handle Time |")
     lines.append("|-------|----------|-------------|-------|-----------------|")
     breach = False
@@ -129,7 +110,7 @@ def get_queue_health(queue_name: str | None = None, time_range: str = "24h") -> 
 
 
 def get_abandonment_analysis(queue_name: str | None = None) -> dict:
-    """Live query: abandonment patterns from CTR data with real-time jitter."""
+    """Live query: abandonment patterns from CTR data."""
     where = "WHERE outcome = 'ABANDONED'"
     q = _safe_param(queue_name, VALID_QUEUES)
     if q:
@@ -160,12 +141,9 @@ def get_abandonment_analysis(queue_name: str | None = None) -> dict:
     """
     rate = _query(rate_sql)[0]
 
-    # Apply real-time jitter
-    rt_rate = _rt_jitter(float(rate['rate']), 0.1)
-    rt_abandoned = _rt_int_jitter(int(rate['abandoned']), 0.1)
-    text = f"""**Abandonment Analysis — Live at {_now_str()}**
+    text = f"""**Abandonment Analysis (Live Data)**
 
-- **Abandonment rate:** {rt_rate}% (~{rt_abandoned} of {rate['total']} contacts)
+- **Abandonment rate:** {rate['rate']}% ({rate['abandoned']} of {rate['total']} contacts)
 """
     if rows:
         r = rows[0]
@@ -200,7 +178,7 @@ def get_agent_utilization(agent_id: str | None = None) -> dict:
     """
     rows = _query(sql)
 
-    lines = ["**Agent Utilization — Live at {_now_str()}**\n"]
+    lines = ["**Agent Utilization (Live Data — Top 10 by Occupancy)**\n"]
     lines.append("| Agent | Occupancy | Status | Avg Handle Time | Events |")
     lines.append("|-------|-----------|--------|-----------------|--------|")
     for r in rows:
@@ -237,7 +215,7 @@ def get_sentiment_trends() -> dict:
     """
     rows = _query(sql)
 
-    lines = [f"**Sentiment Trends — Live at {_now_str()}**\n"]
+    lines = ["**Sentiment Trends (Live Data)**\n"]
     lines.append("| Sentiment | Count | % |")
     lines.append("|-----------|-------|---|")
     for r in rows:
@@ -262,7 +240,7 @@ def get_coaching_recommendations() -> dict:
     """
     rows = _query(sql)
 
-    lines = [f"**Coaching Recommendations — Live at {_now_str()}**\n"]
+    lines = ["**Coaching Recommendations (Live Data — Top 5 Negative Sentiment)**\n"]
     for r in rows:
         icon = "🔴" if r["negative_pct"] >= 25 else "🟡" if r["negative_pct"] >= 20 else "🟢"
         lines.append(f"{icon} **{r['agent_id']}** — {r['negative_pct']}% negative ({r['negative_calls']}/{r['total_calls']} calls)")
@@ -291,7 +269,7 @@ def get_burnout_signals(threshold: float = 0.85) -> dict:
     """
     rows = _query(sql)
 
-    lines = [f"**Burnout Risk Assessment — Live at {_now_str()}**\n"]
+    lines = ["**Burnout Risk Assessment (Live Data)**\n"]
     if not rows:
         lines.append(f"No agents above {threshold} occupancy threshold.")
     for r in rows:
@@ -325,7 +303,7 @@ def get_staffing_forecast() -> dict:
     """
     rows = _query(sql)
 
-    lines = [f"**Staffing Forecast — Live at {_now_str()}**\n"]
+    lines = ["**Staffing Forecast (Live Data — Hourly Volume Pattern)**\n"]
     lines.append("| Hour | Volume | Avg Handle Time | Recommended Staff |")
     lines.append("|------|--------|-----------------|-------------------|")
     for r in rows:
