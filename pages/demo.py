@@ -1822,35 +1822,56 @@ line{stroke:#475569;stroke-width:1.5;marker-end:url(#arrow)}
 
     st.markdown("---")
 
-    st.markdown("### Agent Overview")
-    col1, col2, col3 = st.columns(3)
-    with col1:
+    st.markdown("### Agent Architectures")
+    st.caption("Click each agent to see its data flow, tools, and alert types")
+
+    with st.expander("🟢 Supervisor Agent — Claude Sonnet 4", expanded=False):
         st.markdown("""
-        <div class="agent-card sup">
-            <h4 style="color:#2ecc71; margin:0;">🟢 Supervisor Agent</h4>
-            <p style="color:#8fbc8f; margin:4px 0;"><strong>Model:</strong> Claude Sonnet</p>
-            <p style="color:#8fbc8f; margin:2px 0;">Queue Health · SLA Alerts</p>
-            <p style="color:#8fbc8f; margin:2px 0;">Agent Utilization · Abandonment RCA</p>
-        </div>
-        """, unsafe_allow_html=True)
-    with col2:
+**Data Flow:**
+```
+Amazon Connect → S3 (CTR + Agent Events) → Athena → AgentCore Gateway → Supervisor Agent → Tool Lambda
+```
+
+| Tool | What it does | Data Source | Output |
+|------|-------------|-------------|--------|
+| `get_queue_health` | Queue size, wait times, SLA % | `connect_ctr` | Table + metrics |
+| `get_abandonment_analysis` | Abandon rate, peak hours, root cause | `connect_ctr` | Analysis + chart |
+| `get_agent_utilization` | Per-agent occupancy, status, handle time | `connect_agent_events` | Table + burnout flags |
+| `trigger_sla_alert` | Publishes SLA breach event | EventBridge | Slack alert |
+
+**Alerts:** `SLA_BREACH` → `#connect-sla-alerts` · `ABANDONMENT_SPIKE` → `#connect-sla-alerts`
+        """)
+
+    with st.expander("🟠 Quality Agent — Claude Sonnet 4", expanded=False):
         st.markdown("""
-        <div class="agent-card qual">
-            <h4 style="color:#FF9900; margin:0;">🟠 Quality Agent</h4>
-            <p style="color:#d4a574; margin:4px 0;"><strong>Model:</strong> Claude Sonnet</p>
-            <p style="color:#d4a574; margin:2px 0;">Sentiment Trends · Coaching</p>
-            <p style="color:#d4a574; margin:2px 0;">Compliance Violations</p>
-        </div>
-        """, unsafe_allow_html=True)
-    with col3:
+**Data Flow:**
+```
+Amazon Connect → S3 (Contact Lens) → Athena → AgentCore Gateway → Quality Agent → Tool Lambda
+```
+
+| Tool | What it does | Data Source | Output |
+|------|-------------|-------------|--------|
+| `get_sentiment_trends` | Positive/negative/neutral % over time | `connect_contact_lens` | Trend chart |
+| `get_coaching_recommendations` | Agents with high negative sentiment | `connect_contact_lens` | Coaching plan + excerpts |
+| `get_compliance_violations` | PCI, disclosure, script violations | `connect_contact_lens` | Violation list + severity |
+
+**Alerts:** `COMPLIANCE_VIOLATION` → `#connect-compliance`
+        """)
+
+    with st.expander("🔵 WFM Agent — Nova Lite v2 (50× cheaper)", expanded=False):
         st.markdown("""
-        <div class="agent-card wfm">
-            <h4 style="color:#3498db; margin:0;">🔵 WFM Agent</h4>
-            <p style="color:#7fb3d4; margin:4px 0;"><strong>Model:</strong> Nova Lite (40x cheaper)</p>
-            <p style="color:#7fb3d4; margin:2px 0;">Staffing Forecasts · Charts</p>
-            <p style="color:#7fb3d4; margin:2px 0;">Burnout Detection · Alerts</p>
-        </div>
-        """, unsafe_allow_html=True)
+**Data Flow:**
+```
+Amazon Connect → S3 (CTR + Agent Events) → Athena → AgentCore Gateway → WFM Agent → Tool Lambda
+```
+
+| Tool | What it does | Data Source | Output |
+|------|-------------|-------------|--------|
+| `get_staffing_forecast` | Hourly volume prediction + recommended staff | `connect_ctr` | Forecast table + chart |
+| `get_burnout_signals` | Occupancy-based burnout risk scores | `connect_agent_events` | Risk list + alerts |
+
+**Alerts:** `BURNOUT_RISK` → `#connect-wfm-alerts` · `OCCUPANCY_CRITICAL` → `#connect-sla-alerts`
+        """)
 
     st.markdown("---")
     st.markdown("### Tech Stack")
