@@ -22,7 +22,7 @@ try:
     sys.path.insert(0, str(_P(__file__).parent.parent))
     from live_query import live_agent_response
     _LIVE_MODE = True
-except ImportError:
+except Exception:
     _LIVE_MODE = False
 
 # ---------------------------------------------------------------------------
