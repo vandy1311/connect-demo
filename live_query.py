@@ -84,8 +84,8 @@ def get_queue_health(queue_name: str | None = None, time_range: str = "24h") -> 
             breach = True
         wait_min = int(r["longest_wait_seconds"]) // 60
         wait_sec = int(r["longest_wait_seconds"]) % 60
-        aht_min = int(r["avg_handle_time"]) // 60
-        aht_sec = int(r["avg_handle_time"]) % 60
+        aht_min = int(r.get("avg_handle_time", r.get("avg_state_duration", 0))) // 60
+        aht_sec = int(r.get("avg_handle_time", r.get("avg_state_duration", 0))) % 60
         lines.append(
             f"| {r['queue_name']} | {r['queue_size']} | "
             f"{wait_min}m {wait_sec}s | **{sla}%**{flag} | "
@@ -168,9 +168,9 @@ def get_agent_utilization(agent_id: str | None = None) -> dict:
     SELECT
         agent_id,
         ROUND(AVG(occupancy_rate), 4) as avg_occupancy,
-        MODE(agent_status) as most_common_status,
-        ROUND(AVG(handle_time_seconds), 2) as avg_handle_time,
-        COUNT(*) as event_count
+        MODE(current_state) as most_common_status,
+        ROUND(AVG(state_duration_seconds), 2) as avg_state_duration,
+        SUM(contacts_handled_today) as total_contacts
     FROM read_parquet('{AGENT_EVENTS_PATH}', hive_partitioning=true)
     GROUP BY agent_id
     ORDER BY avg_occupancy DESC
@@ -179,16 +179,16 @@ def get_agent_utilization(agent_id: str | None = None) -> dict:
     rows = _query(sql)
 
     lines = ["**Agent Utilization (Live Data — Top 10 by Occupancy)**\n"]
-    lines.append("| Agent | Occupancy | Status | Avg Handle Time | Events |")
+    lines.append("| Agent | Occupancy | Status | Avg Duration | Contacts |")
     lines.append("|-------|-----------|--------|-----------------|--------|")
     for r in rows:
         occ = round(r["avg_occupancy"] * 100, 1)
         icon = "🔴" if occ >= 90 else "🟡" if occ >= 80 else "🟢"
-        aht_min = int(r["avg_handle_time"]) // 60
-        aht_sec = int(r["avg_handle_time"]) % 60
+        aht_min = int(r.get("avg_handle_time", r.get("avg_state_duration", 0))) // 60
+        aht_sec = int(r.get("avg_handle_time", r.get("avg_state_duration", 0))) % 60
         lines.append(
             f"| {r['agent_id']} | {occ}% {icon} | {r['most_common_status']} | "
-            f"{aht_min}m {aht_sec}s | {r['event_count']} |"
+            f"{aht_min}m {aht_sec}s | {r['total_contacts']} |"
         )
 
     burnout_agents = [r for r in rows if r["avg_occupancy"] >= 0.90]
@@ -260,7 +260,7 @@ def get_burnout_signals(threshold: float = 0.85) -> dict:
     SELECT
         agent_id,
         ROUND(AVG(occupancy_rate), 4) as avg_occupancy,
-        ROUND(AVG(handle_time_seconds), 2) as avg_handle_time,
+        ROUND(AVG(state_duration_seconds), 2) as avg_duration,
         COUNT(*) as shifts
     FROM read_parquet('{AGENT_EVENTS_PATH}', hive_partitioning=true)
     GROUP BY agent_id
@@ -277,7 +277,7 @@ def get_burnout_signals(threshold: float = 0.85) -> dict:
         score = round(r["avg_occupancy"], 2)
         icon = "🔴 CRITICAL" if score >= 0.92 else "🟡 WARNING"
         lines.append(f"{icon} **{r['agent_id']}** — Score: **{score}**, Occupancy: {occ}%")
-        lines.append(f"→ {r['shifts']} shifts tracked, Avg handle time: {int(r['avg_handle_time'])}s\n")
+        lines.append(f"→ {r['shifts']} shifts tracked, Avg handle time: {int(r.get('avg_duration', r.get('avg_handle_time', 0)))}s\n")
 
     result = {"text": "\n".join(lines)}
     critical = [r for r in rows if r["avg_occupancy"] >= 0.92]
@@ -309,7 +309,7 @@ def get_staffing_forecast() -> dict:
     for r in rows:
         vol = r["volume"]
         staff = max(1, vol // 15)  # ~15 contacts per agent per hour
-        lines.append(f"| {int(r['hour'])}:00 | {vol} | {int(r['avg_handle_time'])}s | {staff} |")
+        lines.append(f"| {int(r['hour'])}:00 | {vol} | {int(r.get('avg_duration', r.get('avg_handle_time', 0)))}s | {staff} |")
 
     return {"text": "\n".join(lines), "chart": "forecast"}
 
