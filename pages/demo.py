@@ -1629,54 +1629,116 @@ with tab_before:
 
 
 with tab_deploy:
-    st.markdown('<h2 style="color:#FF9900;">🚀 One-Click Deployment</h2>', unsafe_allow_html=True)
-    st.caption("Any CSM can deploy this for their customer in under 10 minutes")
+    st.markdown('<h2 style="color:#FF9900;">🚀 Deploy to Your AWS Account</h2>', unsafe_allow_html=True)
+    st.caption("No CloudFront, no Terraform — just CDK. Anyone can deploy in under 10 minutes.")
     st.markdown("---")
 
-    st.markdown("### Deployment Steps")
+    # Prerequisites
+    st.markdown("### Prerequisites (one-time, 10 min)")
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #1a2744, #2a3a55); border-radius: 12px; padding: 20px;">
-        <p style="color:#FF9900; font-size:1.1rem; font-weight:600;">Step 1: Configure (30 seconds)</p>
-        <code style="color:#2ecc71; font-size:0.9rem;">cdk deploy --parameters InstanceId=xxx DataLakeBucket=yyy AlertDestination=https://hooks.slack.com/...</code>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("")
-
-    st.markdown("""
-    <div style="background: linear-gradient(135deg, #1a2744, #2a3a55); border-radius: 12px; padding: 20px;">
-        <p style="color:#FF9900; font-size:1.1rem; font-weight:600;">Step 2: Deploy (~8 minutes)</p>
-        <p style="color:#8899aa;">CDK automatically:</p>
-        <p style="color:#e8e8e8;">1. Builds Docker images for Lambda tools → pushes to ECR</p>
-        <p style="color:#e8e8e8;">2. Creates S3 bucket + Glue catalog + Athena workgroup</p>
-        <p style="color:#e8e8e8;">3. Deploys AgentCore Gateway + 3 AI agents</p>
-        <p style="color:#e8e8e8;">4. Wires EventBridge → SNS → Slack alerts</p>
-        <p style="color:#e8e8e8;">5. Generates 70K synthetic demo records</p>
-        <p style="color:#e8e8e8;">6. Outputs agent endpoints + Slack config</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("")
-
-    st.markdown("""
-    <div style="background: linear-gradient(135deg, #1a2744, #2a3a55); border-radius: 12px; padding: 20px;">
-        <p style="color:#FF9900; font-size:1.1rem; font-weight:600;">Step 3: Done ✅</p>
-        <p style="color:#e8e8e8;">Agents are live. Start asking questions.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("---")
-
-    st.markdown("### What Gets Deployed")
-    st.markdown("""
-    ```
-    ConnectAnalytics-Auth     → API key auth + RBAC
-    ConnectAnalytics-Data     → S3 + Glue (3 tables) + Athena
-    ConnectAnalytics-Agents   → AgentCore Gateway + 3 agents + 9 Lambda tools
-    ConnectAnalytics-Alerts   → 5 EventBridge rules + 5 SNS topics + Slack Lambda
-    ConnectAnalytics-KB       → Knowledge Base + 6 SOPs/training docs
-    ```
+| Requirement | Version | Check |
+|-------------|---------|-------|
+| AWS CLI | v2+ | `aws --version` |
+| AWS CDK | v2.150+ | `cdk --version` |
+| Python | 3.12+ | `python3 --version` |
+| Node.js | 20+ | `node --version` |
+| Docker | Running | `docker info` |
     """)
+
+    st.warning("**Bedrock model access required.** In AWS Console → Bedrock → Model access, enable: `Claude Sonnet 4`, `Nova Lite v2`, `Titan Embed v2`")
+
+    st.markdown("---")
+
+    # Step 1
+    st.markdown("### Step 1: Clone & Install (2 min)")
+    st.code("""git clone https://github.com/vandy1311/connect-analytics-platform.git
+cd connect-analytics-platform
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements-dev.txt""", language="bash")
+
+    # Step 2
+    st.markdown("### Step 2: Generate Synthetic Data (30 sec)")
+    st.code("python scripts/generate_synthetic_data.py", language="bash")
+    st.caption("Creates 70K records: 10K CTRs + 50K agent events + 10K Contact Lens analyses")
+
+    # Step 3
+    st.markdown("### Step 3: Bootstrap CDK (first time only, 1 min)")
+    st.code("""export CDK_ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
+export CDK_REGION=us-east-1
+cdk bootstrap aws://$CDK_ACCOUNT/$CDK_REGION""", language="bash")
+
+    # Step 4
+    st.markdown("### Step 4: Deploy (~8 min)")
+    st.code("""cdk deploy --all \
+  -c account=$CDK_ACCOUNT \
+  -c region=$CDK_REGION""", language="bash")
+
+    st.success("""CDK automatically:
+1. Builds Docker images → pushes to ECR
+2. Creates S3 bucket + Glue catalog (3 tables) + Athena workgroup
+3. Stores auth tokens in Secrets Manager
+4. Deploys AgentCore Gateway + 3 AI agents (9 tools)
+5. Creates Knowledge Base with SOPs and compliance docs
+6. Wires EventBridge → SNS (5 topics) → Slack formatter Lambda
+7. Outputs agent endpoints + gateway ID""")
+
+    # Step 5
+    st.markdown("### Step 5: Upload Data to S3")
+    st.code("""BUCKET=$(aws cloudformation describe-stacks \
+  --stack-name ConnectAnalytics-Data \
+  --query "Stacks[0].Outputs[?OutputKey=='DataBucketName'].OutputValue" \
+  --output text)
+
+aws s3 sync output/ctr/ s3://$BUCKET/ctr/
+aws s3 sync output/agent-events/ s3://$BUCKET/agent-events/
+aws s3 sync output/contact-lens/ s3://$BUCKET/contact-lens/""", language="bash")
+
+    # Step 6
+    st.markdown("### Step 6: Configure Slack (optional)")
+    st.code("""aws secretsmanager put-secret-value \
+  --secret-id connect-analytics/slack-webhook \
+  --secret-string "https://hooks.slack.com/services/YOUR/WEBHOOK/URL" """, language="bash")
+
+    # Step 7
+    st.markdown("### Step 7: Done ✅")
+    st.balloons()
+    st.markdown("Agents are live. Launch the demo UI:")
+    st.code("cd demo_ui && streamlit run app.py", language="bash")
+
+    st.markdown("---")
+
+    # Point to your own data
+    st.markdown("### 🔗 Use Your Own Connect Data")
+    st.info("""To point to your existing S3 bucket with Connect data:
+```bash
+cdk deploy --all -c data_lake_bucket=your-existing-bucket-name
+```
+Your data must follow the Hive-partitioned layout:
+- `ctr/year=YYYY/month=MM/day=DD/data.parquet`
+- `agent-events/year=YYYY/month=MM/day=DD/data.parquet`
+- `contact-lens/year=YYYY/month=MM/day=DD/data.json`""")
+
+    st.markdown("---")
+
+    # What gets deployed
+    st.markdown("### What Gets Deployed (5 CDK Stacks)")
+    st.markdown("""
+| Stack | Resources | Cost |
+|-------|-----------|------|
+| `ConnectAnalytics-Auth` | Secrets Manager (auth tokens) | <$1/mo |
+| `ConnectAnalytics-Data` | S3 + Glue (3 tables) + Athena workgroup | ~$12/mo |
+| `ConnectAnalytics-KB` | S3 (docs) + Bedrock Knowledge Base | ~$2/mo |
+| `ConnectAnalytics-Agents` | Tool Lambda (Docker) + AgentCore Gateway + 3 agents | ~$15/mo |
+| `ConnectAnalytics-Alerts` | Slack Lambda + 5 SNS topics + 5 EventBridge rules | ~$1/mo |
+| **Total** | | **~$34/mo** |
+    """)
+
+    st.markdown("---")
+
+    # Cleanup
+    st.markdown("### Cleanup")
+    st.code("cdk destroy --all", language="bash")
+    st.caption("Removes all resources. S3 buckets are auto-deleted (RemovalPolicy.DESTROY).")
 
     st.markdown("---")
 
