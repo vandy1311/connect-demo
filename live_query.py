@@ -24,7 +24,7 @@ if not _DATA_DIR:
 
 CTR_PATH = f"{_DATA_DIR}/ctr/**/*.parquet"
 AGENT_EVENTS_PATH = f"{_DATA_DIR}/agent-events/**/*.parquet"
-CONTACT_LENS_PATH = f"{_DATA_DIR}/contact-lens/**/*.ndjson"
+CONTACT_LENS_PATH = f"{_DATA_DIR}/contact-lens/**/*.json"
 
 
 def _query(sql: str) -> list[dict]:
