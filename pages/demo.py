@@ -1154,20 +1154,68 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
 # ---------------------------------------------------------------------------
 
 with tab_sup:
+
     st.markdown('<h2 class="supervisor-header">Supervisor Agent</h2>', unsafe_allow_html=True)
     st.caption("Claude Sonnet — Queue health, SLA breaches, agent utilization, abandonment analysis")
+
+    with st.expander("🏗️ Agent Architecture", expanded=False):
+        st.markdown("""
+**Data Flow:** Connect → S3 (CTR + Agent Events) → Athena → AgentCore Gateway → **Supervisor Agent** → Tool Lambda
+
+**Tools:**
+| Tool | Description | Data Source |
+|------|-------------|-------------|
+| `get_queue_health` | Queue size, wait times, SLA % | `connect_ctr` |
+| `get_abandonment_analysis` | Abandon rate, peak hours, root cause | `connect_ctr` |
+| `get_agent_utilization` | Occupancy, status, handle time | `connect_agent_events` |
+| `trigger_sla_alert` | Publishes SLA breach to EventBridge | EventBridge → SNS → Slack |
+
+**Model:** Claude Sonnet 4 · **Alert types:** SLA_BREACH, ABANDONMENT_SPIKE
+        """)
+
     st.markdown("---")
     agent_chat("Supervisor", "#037f0c", "🟢")
 
 with tab_qual:
+
     st.markdown('<h2 class="quality-header">Quality Agent</h2>', unsafe_allow_html=True)
     st.caption("Claude Sonnet — Sentiment trends, coaching recommendations, compliance violations")
+
+    with st.expander("🏗️ Agent Architecture", expanded=False):
+        st.markdown("""
+**Data Flow:** Connect → S3 (Contact Lens) → Athena → AgentCore Gateway → **Quality Agent** → Tool Lambda
+
+**Tools:**
+| Tool | Description | Data Source |
+|------|-------------|-------------|
+| `get_sentiment_trends` | Positive/negative/neutral % over time | `connect_contact_lens` |
+| `get_coaching_recommendations` | Agents with high negative sentiment | `connect_contact_lens` |
+| `get_compliance_violations` | PCI, disclosure, script violations | `connect_contact_lens` |
+
+**Model:** Claude Sonnet 4 · **Alert types:** COMPLIANCE_VIOLATION
+        """)
+
     st.markdown("---")
     agent_chat("Quality", "#eb5f07", "🟠")
 
 with tab_wfm:
+
     st.markdown('<h2 class="wfm-header">WFM Agent</h2>', unsafe_allow_html=True)
     st.caption("Nova Lite — Staffing forecasts, burnout signals, schedule optimization")
+
+    with st.expander("🏗️ Agent Architecture", expanded=False):
+        st.markdown("""
+**Data Flow:** Connect → S3 (CTR + Agent Events) → Athena → AgentCore Gateway → **WFM Agent** → Tool Lambda
+
+**Tools:**
+| Tool | Description | Data Source |
+|------|-------------|-------------|
+| `get_staffing_forecast` | Hourly volume prediction + recommended staff | `connect_ctr` |
+| `get_burnout_signals` | Occupancy-based burnout scores | `connect_agent_events` |
+
+**Model:** Nova Lite v2 (50× cheaper than Sonnet) · **Alert types:** BURNOUT_RISK, OCCUPANCY_CRITICAL
+        """)
+
     st.markdown("---")
     agent_chat("WFM", "#0972d3", "🔵")
 
