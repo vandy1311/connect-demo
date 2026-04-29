@@ -280,8 +280,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-tab_auto, tab_sup, tab_qual, tab_wfm, tab_handoff, tab_dash, tab_roi, tab_kb, tab_before, tab_deploy, tab_arch = st.tabs([
-    "🎬 Auto Demo", "Supervisor", "Quality", "WFM", "Agent Handoff",
+tab_sup, tab_qual, tab_wfm, tab_handoff, tab_dash, tab_roi, tab_kb, tab_before, tab_deploy, tab_arch = st.tabs([
+    "Supervisor", "Quality", "WFM", "Agent Handoff",
     "Dashboard", "ROI", "Knowledge Base",
     "Before / After", "Deploy", "Architecture"
 ])
@@ -1152,136 +1152,6 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
 # ---------------------------------------------------------------------------
 # Tab content
 # ---------------------------------------------------------------------------
-
-with tab_auto:
-    st.markdown("### 🎬 5-Minute Platform Demo")
-
-    if st.button("▶️ Run Full Demo", type="primary", use_container_width=True):
-        import time as _dt
-
-        # Step 1: Problem
-        st.markdown("---")
-        st.markdown("## 🔴 The Day 2 Problem")
-        narr1 = "Every Amazon Connect deployment hits the same wall. Supervisors check five dashboards to answer one question. It takes 20 minutes."
-        voice1 = try_voice_synthesis(narr1)
-        if voice1:
-            st.audio(voice1, format="audio/mpeg", autoplay=True)
-        else:
-            st.info(f"🎙️ _{narr1}_")
-        st.markdown("""
-| Before | After |
-|--------|-------|
-| 20 min to answer | **2 seconds** |
-| $150K/year | **$34/month** |
-| 2% call coverage | **100% AI** |
-| SLA breach 15+ min late | **Under 60 sec** |
-| Burnout after resignation | **8 days early** |
-        """)
-        _dt.sleep(2)
-
-        # Step 2: Supervisor
-        st.markdown("---")
-        st.markdown("## 🟢 Supervisor Agent — Live Query")
-        narr2 = "The Supervisor Agent queries 10,000 contact trace records and returns queue health, SLA percentages, and abandonment rates in real time."
-        voice2 = try_voice_synthesis(narr2)
-        if voice2:
-            st.audio(voice2, format="audio/mpeg", autoplay=True)
-        else:
-            st.info(f"🎙️ _{narr2}_")
-        with st.spinner("Supervisor Agent thinking..."):
-            _dt.sleep(1)
-            if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
-                r = live_agent_response("Supervisor", "queue health")
-            else:
-                r = simulate_agent_response("Supervisor", "queue health")
-            st.markdown(r["text"])
-            if "metrics" in r:
-                mc = st.columns(len(r["metrics"]))
-                for i, m in enumerate(r["metrics"]):
-                    mc[i].metric(m["label"], m["value"], m.get("delta", ""))
-
-        # Step 3: Quality
-        st.markdown("---")
-        st.markdown("## 🟠 Quality Agent — Coaching Recommendations")
-        narr3 = "The Quality Agent analyzes every call and identifies agents who need coaching, with transcript excerpts and specific recommendations."
-        voice3 = try_voice_synthesis(narr3)
-        if voice3:
-            st.audio(voice3, format="audio/mpeg", autoplay=True)
-        else:
-            st.info(f"🎙️ _{narr3}_")
-        with st.spinner("Quality Agent thinking..."):
-            _dt.sleep(1)
-            if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
-                r2 = live_agent_response("Quality", "coaching recommendations")
-            else:
-                r2 = simulate_agent_response("Quality", "coaching recommendations")
-            st.markdown(r2["text"])
-
-        # Step 4: WFM
-        st.markdown("---")
-        st.markdown("## 🔵 WFM Agent — Burnout Detection")
-        narr4 = "The WFM Agent runs on Nova Lite, 50 times cheaper than Sonnet. It detects burnout signals 8 days before agents quit."
-        voice4 = try_voice_synthesis(narr4)
-        if voice4:
-            st.audio(voice4, format="audio/mpeg", autoplay=True)
-        else:
-            st.info(f"🎙️ _{narr4}_")
-        with st.spinner("WFM Agent thinking..."):
-            _dt.sleep(1)
-            if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
-                r3 = live_agent_response("WFM", "burnout signals")
-            else:
-                r3 = simulate_agent_response("WFM", "burnout signals")
-            st.markdown(r3["text"])
-
-        # Step 5: Handoff
-        st.markdown("---")
-        st.markdown("## 🤝 Agent-to-Agent Handoff")
-        narr5 = "Three agents collaborate automatically. Supervisor detects, WFM adjusts, Quality coaches. Four seconds, zero human intervention."
-        voice5 = try_voice_synthesis(narr5)
-        if voice5:
-            st.audio(voice5, format="audio/mpeg", autoplay=True)
-        else:
-            st.info(f"🎙️ _{narr5}_")
-        steps = [
-            ("🟢 Supervisor", "SLA breach detected in Billing queue — 68.5% (threshold 80%)"),
-            ("🟢 → 🔵 Handoff to WFM", "Recommending 2 flex pool agents for Billing 10AM-2PM"),
-            ("🔵 → 🟠 Handoff to Quality", "Scheduling coaching for Agent-017 — 30% negative sentiment"),
-            ("✅ Complete", "3 agents collaborated in 4 seconds"),
-        ]
-        for emoji, desc in steps:
-            _dt.sleep(0.8)
-            st.markdown(f"**{emoji}** — {desc}")
-        st.success("✅ Full agent handoff complete — 3 agents collaborated automatically")
-
-        # Step 6: Deploy
-        st.markdown("---")
-        st.markdown("## 🚀 One-Command Deployment")
-        narr6 = "The entire platform deploys with one CDK command in 8 minutes. Five stacks. 34 dollars per month. The code is on GitHub."
-        voice6 = try_voice_synthesis(narr6)
-        if voice6:
-            st.audio(voice6, format="audio/mpeg", autoplay=True)
-        else:
-            st.info(f"🎙️ _{narr6}_")
-        st.code("cdk deploy --all -c account=$AWS_ACCOUNT -c region=us-east-1", language="bash")
-        d1, d2, d3 = st.columns(3)
-        d1.metric("Monthly Cost", "$34")
-        d2.metric("Deploy Time", "8 min")
-        d3.metric("Call Coverage", "100%")
-
-        st.markdown("---")
-        st.success("🎉 **Demo complete.** Three agents. One command. Every answer in 2 seconds.")
-        st.balloons()
-
-    else:
-        st.markdown("""
-        <div style="text-align:center; padding:4rem 0; color:#64748b;">
-            <div style="font-size:3rem; margin-bottom:1rem;">🎬</div>
-            <div style="font-size:1.1rem;">Click <b>Run Full Demo</b> to start the 5-minute guided walkthrough</div>
-            <div style="font-size:0.85rem; margin-top:0.5rem;">Includes live queries, voice narration, and agent handoff</div>
-        </div>
-        """, unsafe_allow_html=True)
-
 
 with tab_sup:
 
