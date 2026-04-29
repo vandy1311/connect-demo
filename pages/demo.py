@@ -1493,8 +1493,7 @@ with tab_handoff:
             status.update(label="🟠 Quality: Coaching scheduled for affected agents", state="complete")
 
         st.success("✅ Full agent handoff complete — 3 agents collaborated automatically in 4 seconds")
-        st.balloons()
-
+    
     else:
         st.markdown("""
         <div style="background: linear-gradient(135deg, #1a2744, #2a3a55); border-radius: 12px;
@@ -1701,7 +1700,6 @@ aws s3 sync output/contact-lens/ s3://$BUCKET/contact-lens/""", language="bash")
 
     # Step 7
     st.markdown("### Step 7: Done ✅")
-    st.balloons()
     st.markdown("Agents are live. Launch the demo UI:")
     st.code("cd demo_ui && streamlit run app.py", language="bash")
 
