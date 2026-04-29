@@ -1154,139 +1154,134 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
 # ---------------------------------------------------------------------------
 
 with tab_auto:
-    st.markdown("### 🎬 5-Minute Guided Demo")
-    st.caption("Click Start to walk through the platform with narration")
+    st.markdown("### 🎬 5-Minute Platform Demo")
 
-    if "demo_step" not in st.session_state:
-        st.session_state.demo_step = 0
+    if st.button("▶️ Run Full Demo", type="primary", use_container_width=True):
+        import time as _dt
 
-    DEMO_STEPS = [
-        {
-            "title": "🔴 The Day 2 Problem",
-            "narration": "Every Amazon Connect deployment hits the same wall on Day 2. The data is there, but supervisors check five dashboards to answer one question. It takes 20 minutes. Quality analysts sample only 2 percent of calls. Workforce planners need a data engineer just to forecast next Monday.",
-            "content": """
-**The problem we're solving:**
-
+        # Step 1: Problem
+        st.markdown("---")
+        st.markdown("## 🔴 The Day 2 Problem")
+        narr1 = "Every Amazon Connect deployment hits the same wall. Supervisors check five dashboards to answer one question. It takes 20 minutes."
+        voice1 = try_voice_synthesis(narr1)
+        if voice1:
+            st.audio(voice1, format="audio/mpeg", autoplay=True)
+        else:
+            st.info(f"🎙️ _{narr1}_")
+        st.markdown("""
 | Before | After |
 |--------|-------|
-| 20 min to get an answer | 2 seconds |
-| $150K/year analytics cost | $34/month |
-| 2% call coverage (manual QA) | 100% AI-analyzed |
-| SLA breach detected 15+ min late | Under 60 seconds |
-| Burnout detected after resignation | 8 days early |
-            """,
-            "duration": 45,
-        },
-        {
-            "title": "🟢 Supervisor Agent — Queue Health",
-            "narration": "The Supervisor Agent monitors queue health in real time. It queries 10,000 contact trace records via SQL and returns SLA percentages, wait times, and abandonment rates. When a threshold is breached, it fires a Slack alert in under 60 seconds.",
-            "content": None,  # Will run live query
-            "query": ("Supervisor", "Show me queue health"),
-            "duration": 50,
-        },
-        {
-            "title": "🟠 Quality Agent — Sentiment & Coaching",
-            "narration": "The Quality Agent analyzes every single call, not just a 2 percent sample. It surfaces sentiment trends across all agents and generates targeted coaching recommendations with transcript excerpts.",
-            "content": None,
-            "query": ("Quality", "Show me coaching recommendations"),
-            "duration": 50,
-        },
-        {
-            "title": "🔵 WFM Agent — Forecasting & Burnout",
-            "narration": "The WFM Agent runs on Nova Lite, which is 50 times cheaper than Claude Sonnet. It forecasts staffing needs by hour and detects burnout signals 8 days before agents quit, based on sustained high occupancy and rising handle times.",
-            "content": None,
-            "query": ("WFM", "Show me burnout signals"),
-            "duration": 50,
-        },
-        {
-            "title": "🤝 Agent-to-Agent Handoff",
-            "narration": "The three agents collaborate automatically. The Supervisor detects a problem, hands off to WFM to adjust schedules, which triggers Quality to schedule coaching. Three agents, four seconds, zero human intervention.",
-            "content": """
-**Handoff chain:**
-1. 🟢 **Supervisor** detects SLA breach in Billing queue
-2. 🟢 → 🔵 Hands off to **WFM** — recommends pulling 2 agents from flex pool
-3. 🔵 → 🟠 Triggers **Quality** — schedules coaching for high-negative agents
-4. ✅ All three agents collaborated in ~4 seconds
-            """,
-            "duration": 45,
-        },
-        {
-            "title": "🏗️ Architecture & Deployment",
-            "narration": "The entire platform deploys with one CDK command in 8 minutes. Five stacks: Auth, Data, Knowledge Base, Agents, and Alerts. No CloudFront, no Terraform. Total cost: 34 dollars per month. The code is open source on GitHub.",
-            "content": """
-**5 CDK Stacks — One Command:**
-- `ConnectAnalytics-Auth` → Secrets Manager
-- `ConnectAnalytics-Data` → S3 + Glue + Athena
-- `ConnectAnalytics-KB` → Bedrock Knowledge Base
-- `ConnectAnalytics-Agents` → AgentCore Gateway + 3 agents + 9 Lambda tools
-- `ConnectAnalytics-Alerts` → EventBridge → SNS → Slack
+| 20 min to answer | **2 seconds** |
+| $150K/year | **$34/month** |
+| 2% call coverage | **100% AI** |
+| SLA breach 15+ min late | **Under 60 sec** |
+| Burnout after resignation | **8 days early** |
+        """)
+        _dt.sleep(2)
 
-**Deploy:** `cdk deploy --all` (~8 minutes)
-**Cost:** ~$34/month | **Coverage:** 100% of calls | **Speed:** 2-second answers
-            """,
-            "duration": 45,
-        },
-    ]
-
-    step = st.session_state.demo_step
-    total = len(DEMO_STEPS)
-
-    # Progress bar
-    st.progress(step / total if step < total else 1.0, text=f"Step {min(step+1, total)} of {total}")
-
-    if step < total:
-        s = DEMO_STEPS[step]
-        st.markdown(f"## {s['title']}")
-
-        # Voice narration
-        if s.get("narration"):
-            voice_audio = try_voice_synthesis(s["narration"])
-            if voice_audio:
-                st.audio(voice_audio, format="audio/mpeg", autoplay=True)
+        # Step 2: Supervisor
+        st.markdown("---")
+        st.markdown("## 🟢 Supervisor Agent — Live Query")
+        narr2 = "The Supervisor Agent queries 10,000 contact trace records and returns queue health, SLA percentages, and abandonment rates in real time."
+        voice2 = try_voice_synthesis(narr2)
+        if voice2:
+            st.audio(voice2, format="audio/mpeg", autoplay=True)
+        else:
+            st.info(f"🎙️ _{narr2}_")
+        with st.spinner("Supervisor Agent thinking..."):
+            _dt.sleep(1)
+            if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
+                r = live_agent_response("Supervisor", "queue health")
             else:
-                st.info(f"🎙️ _{s['narration']}_")
+                r = simulate_agent_response("Supervisor", "queue health")
+            st.markdown(r["text"])
+            if "metrics" in r:
+                mc = st.columns(len(r["metrics"]))
+                for i, m in enumerate(r["metrics"]):
+                    mc[i].metric(m["label"], m["value"], m.get("delta", ""))
 
-        # Content
-        if s.get("content"):
-            st.markdown(s["content"])
+        # Step 3: Quality
+        st.markdown("---")
+        st.markdown("## 🟠 Quality Agent — Coaching Recommendations")
+        narr3 = "The Quality Agent analyzes every call and identifies agents who need coaching, with transcript excerpts and specific recommendations."
+        voice3 = try_voice_synthesis(narr3)
+        if voice3:
+            st.audio(voice3, format="audio/mpeg", autoplay=True)
+        else:
+            st.info(f"🎙️ _{narr3}_")
+        with st.spinner("Quality Agent thinking..."):
+            _dt.sleep(1)
+            if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
+                r2 = live_agent_response("Quality", "coaching recommendations")
+            else:
+                r2 = simulate_agent_response("Quality", "coaching recommendations")
+            st.markdown(r2["text"])
 
-        if s.get("query"):
-            agent, query = s["query"]
-            with st.spinner(f"{agent} Agent thinking..."):
-                import time as _t
-                _t.sleep(1.0)
-                if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
-                    response = live_agent_response(agent, query)
-                else:
-                    response = simulate_agent_response(agent, query)
-                st.markdown(response["text"])
-                if "metrics" in response:
-                    cols = st.columns(len(response["metrics"]))
-                    for i, m in enumerate(response["metrics"]):
-                        cols[i].metric(m["label"], m["value"], m.get("delta", ""))
+        # Step 4: WFM
+        st.markdown("---")
+        st.markdown("## 🔵 WFM Agent — Burnout Detection")
+        narr4 = "The WFM Agent runs on Nova Lite, 50 times cheaper than Sonnet. It detects burnout signals 8 days before agents quit."
+        voice4 = try_voice_synthesis(narr4)
+        if voice4:
+            st.audio(voice4, format="audio/mpeg", autoplay=True)
+        else:
+            st.info(f"🎙️ _{narr4}_")
+        with st.spinner("WFM Agent thinking..."):
+            _dt.sleep(1)
+            if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
+                r3 = live_agent_response("WFM", "burnout signals")
+            else:
+                r3 = simulate_agent_response("WFM", "burnout signals")
+            st.markdown(r3["text"])
 
-        # Navigation
-        st.write("")
-        c1, c2, c3 = st.columns([1, 1, 1])
-        with c1:
-            if step > 0 and st.button("⬅️ Previous", key=f"prev_{step}"):
-                st.session_state.demo_step = step - 1
-                st.rerun()
-        with c2:
-            if st.button("⏭️ Next Step" if step < total - 1 else "🎉 Finish", key=f"next_{step}", type="primary", use_container_width=True):
-                st.session_state.demo_step = step + 1
-                st.rerun()
-        with c3:
-            if st.button("⏹️ Reset", key=f"reset_{step}"):
-                st.session_state.demo_step = 0
-                st.rerun()
-    else:
-        st.markdown("## 🎉 Demo Complete!")
-        st.success("Three agents. One CDK command. Every answer in 2 seconds. $34/month.")
+        # Step 5: Handoff
+        st.markdown("---")
+        st.markdown("## 🤝 Agent-to-Agent Handoff")
+        narr5 = "Three agents collaborate automatically. Supervisor detects, WFM adjusts, Quality coaches. Four seconds, zero human intervention."
+        voice5 = try_voice_synthesis(narr5)
+        if voice5:
+            st.audio(voice5, format="audio/mpeg", autoplay=True)
+        else:
+            st.info(f"🎙️ _{narr5}_")
+        steps = [
+            ("🟢 Supervisor", "SLA breach detected in Billing queue — 68.5% (threshold 80%)"),
+            ("🟢 → 🔵 Handoff to WFM", "Recommending 2 flex pool agents for Billing 10AM-2PM"),
+            ("🔵 → 🟠 Handoff to Quality", "Scheduling coaching for Agent-017 — 30% negative sentiment"),
+            ("✅ Complete", "3 agents collaborated in 4 seconds"),
+        ]
+        for emoji, desc in steps:
+            _dt.sleep(0.8)
+            st.markdown(f"**{emoji}** — {desc}")
+        st.success("✅ Full agent handoff complete — 3 agents collaborated automatically")
+
+        # Step 6: Deploy
+        st.markdown("---")
+        st.markdown("## 🚀 One-Command Deployment")
+        narr6 = "The entire platform deploys with one CDK command in 8 minutes. Five stacks. 34 dollars per month. The code is on GitHub."
+        voice6 = try_voice_synthesis(narr6)
+        if voice6:
+            st.audio(voice6, format="audio/mpeg", autoplay=True)
+        else:
+            st.info(f"🎙️ _{narr6}_")
+        st.code("cdk deploy --all -c account=$AWS_ACCOUNT -c region=us-east-1", language="bash")
+        d1, d2, d3 = st.columns(3)
+        d1.metric("Monthly Cost", "$34")
+        d2.metric("Deploy Time", "8 min")
+        d3.metric("Call Coverage", "100%")
+
+        st.markdown("---")
+        st.success("🎉 **Demo complete.** Three agents. One command. Every answer in 2 seconds.")
         st.balloons()
-        if st.button("🔄 Run Again", type="primary"):
-            st.session_state.demo_step = 0
-            st.rerun()
+
+    else:
+        st.markdown("""
+        <div style="text-align:center; padding:4rem 0; color:#64748b;">
+            <div style="font-size:3rem; margin-bottom:1rem;">🎬</div>
+            <div style="font-size:1.1rem;">Click <b>Run Full Demo</b> to start the 5-minute guided walkthrough</div>
+            <div style="font-size:0.85rem; margin-top:0.5rem;">Includes live queries, voice narration, and agent handoff</div>
+        </div>
+        """, unsafe_allow_html=True)
+
 
 with tab_sup:
 
