@@ -476,31 +476,28 @@ with tab_team:
     st.caption("CSM Agentic Hackathon 2026")
     st.write("")
 
+    from pathlib import Path as _TeamPath
+    _assets = _TeamPath(__file__).parent.parent / "assets"
+
     t1, t2, t3 = st.columns(3)
     with t1:
-        st.markdown("""<div style="text-align:center; background:#1e293b; border:1px solid #334155; border-radius:14px; padding:2rem 1.5rem;">
-        <div style="width:72px; height:72px; border-radius:50%; background:rgba(59,130,246,0.12); color:#3b82f6;
-        display:inline-flex; align-items:center; justify-content:center; font-size:1.6rem; font-weight:700;
-        border:2px solid #334155; margin-bottom:12px;">BB</div>
-        <div style="font-weight:700; font-size:1rem;">Brigette Bucke</div>
-        <div style="font-size:0.8rem; color:#64748b; margin-top:2px;">Product & Strategy Lead</div>
-        </div>""", unsafe_allow_html=True)
+        _bb = _assets / "brigette.jpeg"
+        if _bb.exists():
+            st.image(str(_bb), width=100)
+        st.markdown("**Brigette Bucke**")
+        st.caption("Product & Strategy Lead")
     with t2:
-        st.markdown("""<div style="text-align:center; background:#1e293b; border:1px solid #334155; border-radius:14px; padding:2rem 1.5rem;">
-        <div style="width:72px; height:72px; border-radius:50%; background:rgba(59,130,246,0.12); color:#3b82f6;
-        display:inline-flex; align-items:center; justify-content:center; font-size:1.6rem; font-weight:700;
-        border:2px solid #334155; margin-bottom:12px;">YC</div>
-        <div style="font-weight:700; font-size:1rem;">Yunjie Chen</div>
-        <div style="font-size:0.8rem; color:#64748b; margin-top:2px;">QA & Testing Lead</div>
-        </div>""", unsafe_allow_html=True)
+        _yc = _assets / "yunji.jpeg"
+        if _yc.exists():
+            st.image(str(_yc), width=100)
+        st.markdown("**Yunjie Chen**")
+        st.caption("QA & Testing Lead")
     with t3:
-        st.markdown("""<div style="text-align:center; background:#1e293b; border:1px solid #334155; border-radius:14px; padding:2rem 1.5rem;">
-        <div style="width:72px; height:72px; border-radius:50%; background:rgba(59,130,246,0.12); color:#3b82f6;
-        display:inline-flex; align-items:center; justify-content:center; font-size:1.6rem; font-weight:700;
-        border:2px solid #334155; margin-bottom:12px;">VT</div>
-        <div style="font-weight:700; font-size:1rem;">Vandana Tewani</div>
-        <div style="font-size:0.8rem; color:#64748b; margin-top:2px;">Lead Developer & Architect</div>
-        </div>""", unsafe_allow_html=True)
+        _vt = _assets / "vandana_aws.jpeg"
+        if _vt.exists():
+            st.image(str(_vt), width=100)
+        st.markdown("**Vandana Tewani**")
+        st.caption("Lead Developer & Architect")
 
     st.write("")
     st.markdown("""<div style="text-align:center; background:#1e293b; border:1px solid #334155; border-radius:12px; padding:1.5rem; margin-top:1rem;">
