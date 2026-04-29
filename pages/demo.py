@@ -25,6 +25,13 @@ try:
 except Exception:
     _LIVE_MODE = False
 
+# Strands Agents SDK — real AI with Bedrock
+try:
+    from strands_agents import strands_agent_response
+    _STRANDS_OK = True
+except Exception:
+    _STRANDS_OK = False
+
 # ---------------------------------------------------------------------------
 # Slack integration
 # ---------------------------------------------------------------------------
@@ -196,6 +203,17 @@ with st.sidebar:
         live_mode = False
     else:
         st.info("📋 DEMO — canned responses")
+    # AI Mode toggle (Strands SDK)
+    if _STRANDS_OK:
+        st.markdown("### 🧠 AI Mode")
+        ai_mode = st.toggle("Strands Agents", value=False, key="ai_mode_toggle",
+                            help="ON = Real Bedrock AI reasoning via Strands SDK\nOFF = Direct SQL queries")
+        if ai_mode:
+            st.success("🧠 AI — Bedrock reasoning + tool use", icon="🧠")
+        else:
+            st.caption("Direct query mode")
+        st.markdown("---")
+
     try:
         pass  # architecture diagram not available in cloud deploy
     except Exception:
@@ -962,7 +980,7 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
                             st.session_state[key].append({"role": "user", "content": p["prompt"]})
                             with st.spinner(f"{agent_name} Agent thinking..."):
                                 time.sleep(1.2)
-                                response = live_agent_response(agent_name, p["prompt"]) if (st.session_state.get("live_mode_toggle", False) and _LIVE_MODE) else simulate_agent_response(agent_name, p["prompt"])
+                                response = strands_agent_response(agent_name, p["prompt"]) if (st.session_state.get("ai_mode_toggle", False) and _STRANDS_OK) else (live_agent_response(agent_name, p["prompt"]) if (st.session_state.get("live_mode_toggle", False) and _LIVE_MODE) else simulate_agent_response(agent_name, p["prompt"]))
                                 response = enrich_with_kb(response, p["prompt"])
                             msg_data = {"role": "agent", "content": response["text"]}
                             if "kb_docs" in response:
@@ -1095,7 +1113,7 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
 
         with st.spinner(f"{agent_emoji} {agent_name} Agent thinking..."):
             time.sleep(1.2)  # Simulate latency
-            response = live_agent_response(agent_name, query) if (st.session_state.get('live_mode_toggle', False) and _LIVE_MODE) else simulate_agent_response(agent_name, query)
+            response = strands_agent_response(agent_name, query) if (st.session_state.get('ai_mode_toggle', False) and _STRANDS_OK) else (live_agent_response(agent_name, query) if (st.session_state.get('live_mode_toggle', False) and _LIVE_MODE) else simulate_agent_response(agent_name, query))
             response = enrich_with_kb(response, query)
 
         msg_data = {"role": "agent", "content": response["text"]}
