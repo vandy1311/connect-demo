@@ -280,8 +280,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-tab_sup, tab_qual, tab_wfm, tab_handoff, tab_dash, tab_roi, tab_kb, tab_before, tab_deploy, tab_arch = st.tabs([
-    "Supervisor", "Quality", "WFM", "Agent Handoff",
+tab_auto, tab_sup, tab_qual, tab_wfm, tab_handoff, tab_dash, tab_roi, tab_kb, tab_before, tab_deploy, tab_arch = st.tabs([
+    "🎬 Auto Demo", "Supervisor", "Quality", "WFM", "Agent Handoff",
     "Dashboard", "ROI", "Knowledge Base",
     "Before / After", "Deploy", "Architecture"
 ])
@@ -1152,6 +1152,141 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
 # ---------------------------------------------------------------------------
 # Tab content
 # ---------------------------------------------------------------------------
+
+with tab_auto:
+    st.markdown("### 🎬 5-Minute Guided Demo")
+    st.caption("Click Start to walk through the platform with narration")
+
+    if "demo_step" not in st.session_state:
+        st.session_state.demo_step = 0
+
+    DEMO_STEPS = [
+        {
+            "title": "🔴 The Day 2 Problem",
+            "narration": "Every Amazon Connect deployment hits the same wall on Day 2. The data is there, but supervisors check five dashboards to answer one question. It takes 20 minutes. Quality analysts sample only 2 percent of calls. Workforce planners need a data engineer just to forecast next Monday.",
+            "content": """
+**The problem we're solving:**
+
+| Before | After |
+|--------|-------|
+| 20 min to get an answer | 2 seconds |
+| $150K/year analytics cost | $34/month |
+| 2% call coverage (manual QA) | 100% AI-analyzed |
+| SLA breach detected 15+ min late | Under 60 seconds |
+| Burnout detected after resignation | 8 days early |
+            """,
+            "duration": 45,
+        },
+        {
+            "title": "🟢 Supervisor Agent — Queue Health",
+            "narration": "The Supervisor Agent monitors queue health in real time. It queries 10,000 contact trace records via SQL and returns SLA percentages, wait times, and abandonment rates. When a threshold is breached, it fires a Slack alert in under 60 seconds.",
+            "content": None,  # Will run live query
+            "query": ("Supervisor", "Show me queue health"),
+            "duration": 50,
+        },
+        {
+            "title": "🟠 Quality Agent — Sentiment & Coaching",
+            "narration": "The Quality Agent analyzes every single call, not just a 2 percent sample. It surfaces sentiment trends across all agents and generates targeted coaching recommendations with transcript excerpts.",
+            "content": None,
+            "query": ("Quality", "Show me coaching recommendations"),
+            "duration": 50,
+        },
+        {
+            "title": "🔵 WFM Agent — Forecasting & Burnout",
+            "narration": "The WFM Agent runs on Nova Lite, which is 50 times cheaper than Claude Sonnet. It forecasts staffing needs by hour and detects burnout signals 8 days before agents quit, based on sustained high occupancy and rising handle times.",
+            "content": None,
+            "query": ("WFM", "Show me burnout signals"),
+            "duration": 50,
+        },
+        {
+            "title": "🤝 Agent-to-Agent Handoff",
+            "narration": "The three agents collaborate automatically. The Supervisor detects a problem, hands off to WFM to adjust schedules, which triggers Quality to schedule coaching. Three agents, four seconds, zero human intervention.",
+            "content": """
+**Handoff chain:**
+1. 🟢 **Supervisor** detects SLA breach in Billing queue
+2. 🟢 → 🔵 Hands off to **WFM** — recommends pulling 2 agents from flex pool
+3. 🔵 → 🟠 Triggers **Quality** — schedules coaching for high-negative agents
+4. ✅ All three agents collaborated in ~4 seconds
+            """,
+            "duration": 45,
+        },
+        {
+            "title": "🏗️ Architecture & Deployment",
+            "narration": "The entire platform deploys with one CDK command in 8 minutes. Five stacks: Auth, Data, Knowledge Base, Agents, and Alerts. No CloudFront, no Terraform. Total cost: 34 dollars per month. The code is open source on GitHub.",
+            "content": """
+**5 CDK Stacks — One Command:**
+- `ConnectAnalytics-Auth` → Secrets Manager
+- `ConnectAnalytics-Data` → S3 + Glue + Athena
+- `ConnectAnalytics-KB` → Bedrock Knowledge Base
+- `ConnectAnalytics-Agents` → AgentCore Gateway + 3 agents + 9 Lambda tools
+- `ConnectAnalytics-Alerts` → EventBridge → SNS → Slack
+
+**Deploy:** `cdk deploy --all` (~8 minutes)
+**Cost:** ~$34/month | **Coverage:** 100% of calls | **Speed:** 2-second answers
+            """,
+            "duration": 45,
+        },
+    ]
+
+    step = st.session_state.demo_step
+    total = len(DEMO_STEPS)
+
+    # Progress bar
+    st.progress(step / total if step < total else 1.0, text=f"Step {min(step+1, total)} of {total}")
+
+    if step < total:
+        s = DEMO_STEPS[step]
+        st.markdown(f"## {s['title']}")
+
+        # Voice narration
+        if s.get("narration"):
+            voice_audio = try_voice_synthesis(s["narration"])
+            if voice_audio:
+                st.audio(voice_audio, format="audio/mpeg", autoplay=True)
+            else:
+                st.info(f"🎙️ _{s['narration']}_")
+
+        # Content
+        if s.get("content"):
+            st.markdown(s["content"])
+
+        if s.get("query"):
+            agent, query = s["query"]
+            with st.spinner(f"{agent} Agent thinking..."):
+                import time as _t
+                _t.sleep(1.0)
+                if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
+                    response = live_agent_response(agent, query)
+                else:
+                    response = simulate_agent_response(agent, query)
+                st.markdown(response["text"])
+                if "metrics" in response:
+                    cols = st.columns(len(response["metrics"]))
+                    for i, m in enumerate(response["metrics"]):
+                        cols[i].metric(m["label"], m["value"], m.get("delta", ""))
+
+        # Navigation
+        st.write("")
+        c1, c2, c3 = st.columns([1, 1, 1])
+        with c1:
+            if step > 0 and st.button("⬅️ Previous", key=f"prev_{step}"):
+                st.session_state.demo_step = step - 1
+                st.rerun()
+        with c2:
+            if st.button("⏭️ Next Step" if step < total - 1 else "🎉 Finish", key=f"next_{step}", type="primary", use_container_width=True):
+                st.session_state.demo_step = step + 1
+                st.rerun()
+        with c3:
+            if st.button("⏹️ Reset", key=f"reset_{step}"):
+                st.session_state.demo_step = 0
+                st.rerun()
+    else:
+        st.markdown("## 🎉 Demo Complete!")
+        st.success("Three agents. One CDK command. Every answer in 2 seconds. $34/month.")
+        st.balloons()
+        if st.button("🔄 Run Again", type="primary"):
+            st.session_state.demo_step = 0
+            st.rerun()
 
 with tab_sup:
 
