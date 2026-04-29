@@ -1493,6 +1493,7 @@ with tab_handoff:
             status.update(label="🟠 Quality: Coaching scheduled for affected agents", state="complete")
 
         st.success("✅ Full agent handoff complete — 3 agents collaborated automatically in 4 seconds")
+        st.balloons()
     
     else:
         st.markdown("""
