@@ -35,6 +35,31 @@ with tab_overview:
     Three AI agents query your Amazon Connect data lake and return actionable insights in natural language.</p>
     </div>""", unsafe_allow_html=True)
 
+    # The Problem
+    st.markdown("""<div style="background:#1e293b; border:1px solid #334155; border-left:4px solid #f87171; border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
+    <h4 style="color:#f87171; margin-top:0;">The Day 2 Problem</h4>
+    <p style="color:#94a3b8; font-size:0.95rem; line-height:1.7;">
+    Every Amazon Connect deployment hits the same wall. The phones are ringing. Agents are logged in.
+    Contact Lens is transcribing every call. But the data — contact trace records, agent events, sentiment scores —
+    sits in streams and storage with <b style="color:#f1f5f9;">no natural language interface on top of it</b>.
+    </p>
+    <p style="color:#94a3b8; font-size:0.95rem; line-height:1.7; margin-bottom:0;">
+    Supervisors check <b style="color:#f1f5f9;">five dashboards to answer one question</b>, and it takes 20 minutes.
+    Quality analysts can't pull coaching recommendations across all agents in a single query.
+    Workforce planners can't forecast next Monday's staffing without a data engineer and a custom pipeline.
+    </p>
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("""<div style="background:#1e293b; border:1px solid #334155; border-left:4px solid #34d399; border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
+    <h4 style="color:#34d399; margin-top:0;">The Solution</h4>
+    <p style="color:#94a3b8; font-size:0.95rem; line-height:1.7; margin-bottom:0;">
+    Three purpose-built AI agents on <b style="color:#f1f5f9;">Amazon Bedrock AgentCore</b> sit directly on top of
+    Connect's existing data lake and answer the questions your operations team actually asks —
+    in natural language, with actions attached — for <b style="color:#34d399;">~$34/month</b>.
+    Deploy with one CDK command in 8 minutes. No changes to your Connect instance required.
+    </p>
+    </div>""", unsafe_allow_html=True)
+
     # CTA
     _, c1, c2, _ = st.columns([1.2, 1, 1, 1.2])
     with c1:
