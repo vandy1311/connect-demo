@@ -483,7 +483,7 @@ with tab_team:
         display:inline-flex; align-items:center; justify-content:center; font-size:1.6rem; font-weight:700;
         border:2px solid #334155; margin-bottom:12px;">BB</div>
         <div style="font-weight:700; font-size:1rem;">Brigette Bucke</div>
-        <div style="font-size:0.8rem; color:#64748b; margin-top:2px;">Product & Demo Lead</div>
+        <div style="font-size:0.8rem; color:#64748b; margin-top:2px;">Product & Strategy Lead</div>
         </div>""", unsafe_allow_html=True)
     with t2:
         st.markdown("""<div style="text-align:center; background:#1e293b; border:1px solid #334155; border-radius:14px; padding:2rem 1.5rem;">
