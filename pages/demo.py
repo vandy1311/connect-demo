@@ -1173,6 +1173,10 @@ def agent_chat(agent_name: str, agent_color: str, agent_emoji: str):
 
 with tab_auto:
     st.markdown("### 🎬 5-Minute Guided Demo")
+    from pathlib import Path as _C2P
+    _comic2 = _C2P(__file__).parent.parent / "assets" / "comic2.jpg"
+    if _comic2.exists():
+        st.image(str(_comic2), use_container_width=True)
     st.caption("Click Start to walk through the platform with narration")
 
     if "demo_step" not in st.session_state:
