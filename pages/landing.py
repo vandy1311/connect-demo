@@ -60,6 +60,12 @@ with tab_overview:
     </p>
     </div>""", unsafe_allow_html=True)
 
+    # Comic strip
+    from pathlib import Path as _CP
+    _comic = _CP(__file__).parent.parent / "assets" / "comic.jpg"
+    if _comic.exists():
+        st.image(str(_comic), use_container_width=True)
+
     # CTA
     _, c1, c2, _ = st.columns([1.2, 1, 1, 1.2])
     with c1:
