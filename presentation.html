@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en"><head><style id="qw-theme">:root {
+  --color-bg: #f2f1f4;
+  --color-text: #352f3d;
+  --color-navbar-bg: #eae8ed;
+  --color-bg-chat-view: #fcfcfd;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #eae8ed;
+  --color-bg-hover: #dcdadf;
+  --color-surface: #eae8ed;
+  --color-surface-hover: #dcdadf;
+  --color-surface-active: #c1bec6;
+  --color-border: #c1bec6;
+  --color-border-light: #dcdadf;
+  --color-border-strong: #c1bec6;
+  --color-primary: #4200db;
+  --color-primary-dark: #35009e;
+  --color-primary-light: #8575ff;
+  --color-primary-bg: #e8e6ff;
+  --color-primary-hover-border: #35009e;
+  --color-nav-icon-active: #4200db;
+  --color-nav-hover-border: #4200db;
+  --color-primary-alpha-3: color-mix(in srgb, #4200db 3%, transparent);
+  --color-primary-alpha-5: color-mix(in srgb, #4200db 5%, transparent);
+  --color-primary-alpha-8: color-mix(in srgb, #4200db 8%, transparent);
+  --color-primary-alpha-12: color-mix(in srgb, #4200db 12%, transparent);
+  --color-primary-alpha-15: color-mix(in srgb, #4200db 15%, transparent);
+  --color-primary-alpha-20: color-mix(in srgb, #4200db 20%, transparent);
+  --color-primary-alpha-25: color-mix(in srgb, #4200db 25%, transparent);
+  --color-primary-alpha-30: color-mix(in srgb, #4200db 30%, transparent);
+  --color-primary-alpha-40: color-mix(in srgb, #4200db 40%, transparent);
+  --color-primary-alpha-50: color-mix(in srgb, #4200db 50%, transparent);
+  --color-primary-alpha-60: color-mix(in srgb, #4200db 60%, transparent);
+  --color-primary-subtle: color-mix(in srgb, #4200db 18%, transparent);
+  --color-primary-border: #8575ff;
+  --color-focus-ring: color-mix(in srgb, #4200db 50%, transparent);
+  --color-sidebar-hover: color-mix(in srgb, #4200db 12%, transparent);
+  --color-accent: #4200db;
+  --color-accent-foreground: #4200db;
+  --color-accent-dark: #35009e;
+  --color-accent-light: #e8e6ff;
+  --color-accent-inverse: #ffffff;
+  --color-link: #4200db;
+  --color-primary-gradient-end: #e8e6ff;
+  --color-primary-bg-solid: #eae8ed;
+  --color-user-bubble: #F3F3F7;
+  --color-text-secondary: #5e5966;
+  --color-text-tertiary: #7a7582;
+  --color-text-muted: #938f9b;
+  --color-text-on-primary: #f2f1f4;
+  --color-success: #00802f;
+  --color-success-dark: #00471e;
+  --color-success-light: #d9ffd6;
+  --color-success-hover: #005c26;
+  --color-success-bg: rgba(0, 128, 47, .09);
+  --color-success-border: rgba(0, 128, 47, .22);
+  --color-success-foreground: #00802f;
+  --color-success-dark-foreground: #00471e;
+  --color-error: #db0000;
+  --color-error-dark: #700000;
+  --color-error-light: #ffe0e0;
+  --color-error-hover: #ffe0e0;
+  --color-error-bg: rgba(219, 0, 0, .08);
+  --color-error-border: rgba(219, 0, 0, .22);
+  --color-error-active-border: #db0000;
+  --color-error-foreground: #db0000;
+  --color-error-dark-foreground: #700000;
+  --color-error-inverse: #ffffff;
+  --color-warning: #f2b100;
+  --color-warning-dark: #573a00;
+  --color-warning-light: #fffbbd;
+  --color-warning-hover: #db9200;
+  --color-warning-bg: rgba(242, 177, 0, .1);
+  --color-warning-border: rgba(242, 177, 0, .28);
+  --color-warning-foreground: #f2b100;
+  --color-warning-dark-foreground: #573a00;
+  --color-warning-inverse: #573a00;
+  --color-surface-warning: #fffbbd;
+  --color-text-warning: #573a00;
+  --color-info: #006ce0;
+  --color-info-dark: #002a66;
+  --color-info-light: #d1f1ff;
+  --color-info-hover: #003b8f;
+  --color-info-bg: rgba(0, 108, 224, .09);
+  --color-info-border: rgba(0, 108, 224, .22);
+  --color-info-foreground: #006ce0;
+  --color-info-dark-foreground: #002a66;
+  --color-info-inverse: #ffffff;
+  --color-overlay: #dcdadf80;
+  --color-shadow: #352f3d40;
+  --color-hover: #352f3d0d;
+  --color-tooltip-bg: #eae8ed;
+  --color-tooltip-text: #352f3d;
+  --color-voice-purple: #8575ff;
+  --color-voice-purple-dark: #4200db;
+  --color-voice-purple-light: #8575ff;
+  --color-voice-red: #db0000;
+  --color-voice-red-dark: #700000;
+  --color-voice-amber: #f2b100;
+  --color-voice-purple-glow: rgba(66, 0, 219, .4);
+  --color-voice-red-glow: rgba(219, 0, 0, .4);
+  --font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", "Monaco", "Menlo", "Consolas", monospace;
+  --text-2xs: .5625rem;
+  --text-xs: .625rem;
+  --text-sm: .6875rem;
+  --text-base: .75rem;
+  --text-md: .8125rem;
+  --text-lg: .875rem;
+  --text-xl: 1rem;
+  --text-2xl: 1.125rem;
+  --text-3xl: 1.25rem;
+  --text-4xl: 1.5rem;
+  --text-5xl: 2rem;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-card: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 8px;
+  --shadow-sm: 0 1px 2px rgba(53, 47, 61, .06);
+  --shadow-md: 0 4px 12px rgba(53, 47, 61, .1);
+  --color-success-bg-solid: #d9ffd6;
+  --color-error-bg-solid: #ffe0e0;
+  --color-error-border-solid: #ffe0e0;
+  --color-warning-bg-solid: #fffbbd;
+  --color-warning-text: #573a00;
+  --color-info-bg-solid: #d1f1ff;
+  --color-info-bg-solid-alt: #d1f1ff;
+  --color-info-text: #002a66;
+  --color-info-text-alt: #002a66;
+  --color-emerald: #367c53;
+  --color-teal: #0c9aa7;
+  --color-code-bg: #eae8ed;
+  --color-code-header-bg: #dcdadf;
+  --color-code-text: #352f3d;
+  --color-code-border: #c1bec6;
+  --color-code-muted: #5e5966;
+  --color-inline-code-bg: #eae8ed;
+  --color-inline-code-text: #352f3d;
+  --color-inline-code-border: #c1bec6;
+  --color-scrollbar-thumb: #c1bec6;
+  --color-scrollbar-track: transparent;
+  --color-graph-node-text: #352f3d;
+  --color-graph-node-text-dim: #938f9b;
+  --color-graph-edge-default: #938f9b;
+  --color-graph-edge-cross: #d08025;
+  --color-graph-edge-text: #5e5966;
+  --color-graph-edge-stroke: #f2f1f4;
+  --color-graph-highlight-bg: #FF6B6B;
+  --color-graph-highlight-border: #E74C3C;
+  --color-graph-search-bg: #FFD700;
+  --color-graph-search-border: #FFA500;
+  --color-graph-focus-border: #C0392B;
+  --color-graph-external-border: #938f9b;
+  --color-graph-cat-file: #3878b0;
+  --color-graph-cat-folder: #5e5966;
+  --color-graph-cat-file-aggregate: #2d6a9f;
+  --color-graph-cat-class: #7138cc;
+  --color-graph-cat-function: #367c53;
+  --color-graph-cat-method: #0c9aa7;
+  --color-graph-cat-variable: #d08025;
+  --color-graph-cat-import: #b06a1a;
+  --color-graph-cat-module: #5e35a8;
+  --color-graph-cat-concept: #993333;
+  --color-graph-cat-person: #c44d4d;
+  --color-graph-cat-org: #0c9aa7;
+  --color-graph-cat-organization: #0c9aa7;
+  --color-graph-cat-product: #8e47ff;
+  --color-graph-cat-metric: #c44d78;
+  --color-graph-cat-location: #34495E;
+  --color-graph-cat-date: #b34d8a;
+  --color-graph-cat-code: #3878b0;
+  --color-graph-cat-doc: #5e5966;
+  --color-graph-cat-url: #367c53;
+  --color-graph-cat-email: #5e35a8;
+  --color-graph-cat-unknown: #938f9b;
+  --color-graph-rel-contains: #938f9b;
+  --color-graph-rel-extends: #7138cc;
+  --color-graph-rel-implements: #3878b0;
+  --color-graph-rel-imports: #d08025;
+  --color-graph-rel-uses: #367c53;
+  --color-graph-rel-calls: #367c53;
+  --color-graph-rel-references: #d08025;
+  --color-graph-rel-related-to: #938f9b;
+  --color-graph-rel-works-on: #993333;
+  --color-graph-rel-owns: #0c9aa7;
+  --color-graph-rel-depends-on: #b06a1a;
+  --color-graph-rel-parent-of: #938f9b;
+  --qs-content: #ffffff;
+  --qs-main: #eae8ed;
+  --qs-primary-foreground: #352f3d;
+  --qs-secondary-foreground: #5e5966;
+  --qs-tertiary-foreground: #938f9b;
+  --qs-placeholder-foreground: #938f9b;
+  --qs-divider: #c1bec6;
+  --qs-default-border: #c1bec6;
+  --qs-neutral-soft: #c1bec6;
+  --qs-neutral-gray-50: #eae8ed;
+  --qs-tertiary-background: #eae8ed;
+  --qs-action-hover: #352f3d0d;
+  --qs-primary-default: #4200db;
+  --qs-primary-dark: #35009e;
+  --qs-primary-light: #e8e6ff;
+  --qs-success-default: #00802f;
+  --qs-error-default: #db0000;
+  --qs-font-sans: "Amazon Ember", "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --react-pdf-text-layer: 1;
+  --highlight-bg-color: rgba(180, 0, 170, 1);
+  --highlight-selected-bg-color: rgba(0, 100, 0, 1);
+  --react-pdf-annotation-layer: 1;
+  --annotation-unfocused-field-background: url("data:image/svg+xml;charset=UTF-8,<svg width='1px' height='1px' xmlns='http://www.w3.org/2000/svg'><rect width='100%' height='100%' style='fill:rgba(0, 54, 255, 0.13);'/></svg>");
+  --input-focus-border-color: Highlight;
+  --input-focus-outline: 1px solid Canvas;
+  --input-unfocused-border-color: transparent;
+  --input-disabled-border-color: transparent;
+  --input-hover-border-color: black;
+  --link-outline: none;
+}
+body { background: var(--color-bg); }</style>
+<meta charset="UTF-8">
+<title>Repo Audit Power — The Full Story</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Amazon Ember', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0e1a;
+    color: #e8edf5;
+    min-height: 100vh;
+  }
+
+  .slide {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+  .slide::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #ff9900 0%, #ff6600 100%);
+    opacity: 0.7;
+  }
+
+  /* Title slide */
+  .title-slide {
+    text-align: center;
+    background: radial-gradient(ellipse at center, #131a2e 0%, #0a0e1a 70%);
+  }
+  .title-slide::before { display: none; }
+  .title-slide h1 {
+    font-size: 40px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+  .title-slide .accent { color: #ff9900; }
+  .title-slide .subtitle {
+    font-size: 17px;
+    color: #8a9bb5;
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+  .title-slide .team {
+    font-size: 15px;
+    color: #b0bdd0;
+    margin-bottom: 20px;
+  }
+  .title-slide .tagline {
+    display: inline-block;
+    background: rgba(255,153,0,0.1);
+    border: 1px solid rgba(255,153,0,0.3);
+    border-radius: 24px;
+    padding: 10px 24px;
+    font-size: 13px;
+    color: #ff9900;
+  }
+
+  /* Content */
+  h2 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+  }
+  h2 .num { color: #ff9900; font-weight: 700; margin-right: 8px; }
+  .slide-subtitle {
+    font-size: 13px;
+    color: #6a7fa0;
+    margin-bottom: 22px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  h3 {
+    font-size: 15px;
+    color: #ff9900;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  p, li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #c5d0e0;
+  }
+  p { margin-bottom: 10px; }
+  ul { list-style: none; padding: 0; margin-bottom: 14px; }
+  ul li { padding: 4px 0 4px 20px; position: relative; }
+  ul li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 12px;
+    width: 7px; height: 7px;
+    background: #ff9900;
+    border-radius: 50%;
+  }
+  strong { color: #ffffff; font-weight: 600; }
+  code {
+    background: rgba(255,153,0,0.1);
+    color: #ffb84d;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .card-icon { font-size: 16px; color: #ff9900; margin-bottom: 6px; }
+  .card h4 { font-size: 13px; color: #ffffff; margin-bottom: 4px; font-weight: 600; }
+  .card p { font-size: 12px; color: #8a9bb5; margin-bottom: 0; line-height: 1.4; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 28px; margin: 14px 0; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: linear-gradient(180deg, #ff9900, #4caf50);
+  }
+  .timeline-item { position: relative; margin-bottom: 14px; padding-left: 20px; }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -23px; top: 6px;
+    width: 10px; height: 10px;
+    background: #ff9900;
+    border-radius: 50%;
+    border: 2px solid #0a0e1a;
+  }
+  .timeline-item.done::before { background: #4caf50; }
+  .timeline-item h4 { font-size: 13px; color: #ffffff; margin-bottom: 2px; }
+  .timeline-item p { font-size: 12px; color: #8a9bb5; margin-bottom: 0; }
+
+  /* Metrics */
+  .metrics { display: flex; gap: 14px; flex-wrap: wrap; margin: 14px 0; }
+  .metric {
+    background: rgba(255,153,0,0.06);
+    border: 1px solid rgba(255,153,0,0.2);
+    border-radius: 8px;
+    padding: 12px 18px;
+    text-align: center;
+    min-width: 90px;
+  }
+  .metric-value { font-size: 22px; font-weight: 700; color: #ff9900; font-family: 'JetBrains Mono', monospace; }
+  .metric-label { font-size: 10px; color: #6a7fa0; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+  thead th {
+    background: rgba(255,153,0,0.08);
+    color: #ff9900;
+    font-weight: 600;
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255,153,0,0.2);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  td { padding: 7px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #c5d0e0; }
+
+  /* Callouts */
+  .callout {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  .callout-insight { background: rgba(255,153,0,0.06); border-left: 3px solid #ff9900; }
+  .callout-success { background: rgba(76,175,80,0.06); border-left: 3px solid #4caf50; }
+  .callout-warning { background: rgba(229,57,53,0.06); border-left: 3px solid #e53935; }
+  .callout strong { display: block; margin-bottom: 3px; }
+
+  /* Flow */
+  .flow { display: flex; align-items: center; gap: 0; margin: 18px 0; flex-wrap: wrap; justify-content: center; }
+  .flow-step {
+    background: rgba(255,153,0,0.08);
+    border: 1px solid rgba(255,153,0,0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+    min-width: 100px;
+  }
+  .flow-step .step-num { font-size: 10px; color: #ff9900; font-weight: 700; margin-bottom: 2px; }
+  .flow-step .step-text { font-size: 11px; color: #c5d0e0; }
+  .flow-arrow { color: #ff9900; font-size: 14px; padding: 0 4px; }
+
+  /* Two column */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin: 14px 0; }
+
+  /* Two artifacts */
+  .two-artifacts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 16px 0; }
+  .artifact-box {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .artifact-box.primary { border-color: rgba(255,153,0,0.3); background: rgba(255,153,0,0.03); }
+  .artifact-box h4 { font-size: 14px; color: #ffffff; margin-bottom: 6px; }
+  .artifact-box p { font-size: 12px; color: #8a9bb5; margin-bottom: 6px; }
+  .badge {
+    display: inline-block;
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .badge-orange { background: rgba(255,153,0,0.15); color: #ff9900; }
+  .badge-blue { background: rgba(66,165,245,0.15); color: #42a5f5; }
+
+  /* Slide number */
+  .slide-num {
+    position: absolute;
+    bottom: 16px;
+    right: 32px;
+    font-size: 10px;
+    color: #3a4a68;
+  }
+  .footer-link { font-size: 11px; color: #6a7fa0; margin-top: 14px; }
+  .footer-link code { font-size: 11px; }
+
+  @media (max-width: 700px) {
+    .two-col, .two-artifacts { grid-template-columns: 1fr; }
+    .slide { padding: 32px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide title-slide">
+  <h1>Repo Audit <span class="accent">Power</span></h1>
+  <p class="subtitle">Built a hackathon solution. Pursued the blog. Hit the security wall.<br>Turned the pain into a tool that teaches and validates.</p>
+  <p class="team"><strong>Brigette Bucke · Yunjie Chen · Vandana Tewani</strong></p>
+  <div class="tagline"><i class="fa-solid fa-shield-halved"></i>&nbsp; Kiro Power · Security Triage · Auto-Heal · Hackathon Gate</div>
+  <span class="slide-num">1</span>
+</div>
+
+<!-- SLIDE 2: The Journey -->
+<div class="slide">
+  <h2><span class="num">01</span> How One Thing Led to Another</h2>
+  <p class="slide-subtitle">Hackathon project is under judging — this is what happened after</p>
+
+  <div style="display:flex; align-items:stretch; gap:0; margin:32px 0; justify-content:center;">
+    <div style="flex:1; max-width:150px; text-align:center; padding:18px 12px; background:rgba(255,153,0,0.04); border-radius:10px 0 0 10px; border:1px solid rgba(255,153,0,0.15); border-right:none;">
+      <div style="font-size:26px; margin-bottom:8px;">🏗️</div>
+      <div style="font-size:12px; color:#ff9900; font-weight:600; margin-bottom:4px;">Built it</div>
+      <div style="font-size:11px; color:#8a9bb5;">AI agents on serverless</div>
+    </div>
+    <div style="flex:1; max-width:150px; text-align:center; padding:18px 12px; background:rgba(255,153,0,0.06); border:1px solid rgba(255,153,0,0.15); border-right:none;">
+      <div style="font-size:26px; margin-bottom:8px;">📝</div>
+      <div style="font-size:12px; color:#ff9900; font-weight:600; margin-bottom:4px;">Pursued blog</div>
+      <div style="font-size:11px; color:#8a9bb5;">APG requires security bar</div>
+    </div>
+    <div style="flex:1; max-width:150px; text-align:center; padding:18px 12px; background:rgba(255,153,0,0.08); border:1px solid rgba(255,153,0,0.15); border-right:none;">
+      <div style="font-size:26px; margin-bottom:8px;">🔍</div>
+      <div style="font-size:12px; color:#ff9900; font-weight:600; margin-bottom:4px;">Yunjie audited</div>
+      <div style="font-size:11px; color:#8a9bb5;">Found real issues</div>
+    </div>
+    <div style="flex:1; max-width:150px; text-align:center; padding:18px 12px; background:rgba(255,153,0,0.10); border:1px solid rgba(255,153,0,0.15); border-right:none;">
+      <div style="font-size:26px; margin-bottom:8px;">🔧</div>
+      <div style="font-size:12px; color:#ff9900; font-weight:600; margin-bottom:4px;">Vandana fixed</div>
+      <div style="font-size:11px; color:#8a9bb5;">Fix → recheck → fix</div>
+    </div>
+    <div style="flex:1; max-width:150px; text-align:center; padding:18px 12px; background:rgba(255,153,0,0.12); border:1px solid rgba(255,153,0,0.15); border-right:none;">
+      <div style="font-size:26px; margin-bottom:8px;">💡</div>
+      <div style="font-size:12px; color:#ff9900; font-weight:600; margin-bottom:4px;">Brigette saw it</div>
+      <div style="font-size:11px; color:#8a9bb5;">Skill + self-heal options</div>
+    </div>
+    <div style="flex:1; max-width:150px; text-align:center; padding:18px 12px; background:rgba(76,175,80,0.08); border-radius:0 10px 10px 0; border:1px solid rgba(76,175,80,0.25);">
+      <div style="font-size:26px; margin-bottom:8px;">⚡</div>
+      <div style="font-size:12px; color:#4caf50; font-weight:600; margin-bottom:4px;">Yunjie hardened</div>
+      <div style="font-size:11px; color:#8a9bb5;">Made it reusable</div>
+    </div>
+  </div>
+
+  <div class="callout callout-insight" style="margin-top:32px;">
+    <strong>AI tools helped us build fast — but the path to "publishable" exposed real gaps.</strong> We learned by fixing. That's the entire point of a hackathon. The tool we built from that process is what we're showing you.
+  </div>
+  <span class="slide-num">2</span>
+</div>
+
+<!-- SLIDE 3: Panel Triage at Scale -->
+<div class="slide">
+  <h2><span class="num">02</span> Panel Triage at Scale</h2>
+  <p class="slide-subtitle">One command. N submissions. Human judgment on what matters.</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0;">
+    <div style="background:rgba(66,165,245,0.06); border:1px solid rgba(66,165,245,0.25); border-radius:8px; padding:12px 16px;">
+      <div style="font-size:10px; color:#42a5f5; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>&nbsp; Via Kiro (natural language)
+      </div>
+      <div style="font-family:'JetBrains Mono', 'Fira Code', monospace; font-size:12px; color:#c5d0e0; line-height:1.5;">
+        "Audit every repo in <span style="color:#ffb84d;">submissions/</span> and summarize the red ones."
+      </div>
+      <p style="font-size:10px; color:#6a7fa0; margin-top:8px; margin-bottom:0;">Installable Kiro Power. Activates on keywords: audit, verify, hackathon, validate.</p>
+    </div>
+
+    <div style="background:rgba(255,153,0,0.06); border:1px solid rgba(255,153,0,0.2); border-radius:8px; padding:12px 16px;">
+      <div style="font-size:10px; color:#ff9900; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">
+        <i class="fa-solid fa-terminal"></i>&nbsp; Via CLI (CI, scripts, non-Kiro)
+      </div>
+      <div style="font-family:'JetBrains Mono', 'Fira Code', monospace; font-size:11px; color:#ffb84d; line-height:1.5; overflow-x:auto;">
+        for repo in submissions/*/; do<br>
+        &nbsp;&nbsp;bash repo-audit.sh "$repo" \<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;--quiet --format json --auto-heal<br>
+        done
+      </div>
+      <p style="font-size:10px; color:#6a7fa0; margin-top:8px; margin-bottom:0;">Same engine. Works anywhere bash works. Exit codes for gating.</p>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-file-lines"></i></div>
+      <h4>Actionable Report</h4>
+      <p>Pass/fail table with error column, Failure Details per check, pattern-matched fix suggestions, collapsible log excerpts.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-chart-column"></i></div>
+      <h4>JSON for Dashboards</h4>
+      <p><code>--format json</code> emits a self-contained report per repo — drop into any panel dashboard or triage spreadsheet.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-traffic-light"></i></div>
+      <h4>Exit Codes for Gating</h4>
+      <p><code>0</code> clean, <code>1</code> failures remain, <code>2</code> usage error. CI-friendly. Gate submissions before human review.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="fa-solid fa-gauge-high"></i></div>
+      <h4>~90s Per Repo</h4>
+      <p>8 checks, per-repo venv isolation means parallel audits are safe. Scales to the whole submission pool.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-insight">
+    <strong>Scales the panel's read — human time for judgment, not plumbing.</strong> Every submission lands with a pre-audited report: what works, what's broken, and what to do about it.
+  </div>
+  <span class="slide-num">3</span>
+</div>
+
+<!-- SLIDE 4: Proven, Then Hardened -->
+<div class="slide">
+  <h2><span class="num">03</span> Proven, Then Hardened</h2>
+  <p class="slide-subtitle">Dogfooded on our own submission · panel-grade by the time you see it</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Dogfood Evidence — What It Caught</h3>
+      <p style="font-size:12px; color:#8a9bb5; margin-bottom:10px;">Ran on our hackathon repo. AI-assisted code looked clean; audit found what humans would have missed at first pass.</p>
+      <table style="font-size:11px;">
+        <tbody>
+          <tr><td><strong>SQL injection</strong></td><td style="color:#e53935;">Critical</td></tr>
+          <tr><td><strong>Hardcoded demo tokens</strong></td><td style="color:#e53935;">Critical</td></tr>
+          <tr><td><strong>IaC deploy broken</strong></td><td style="color:#ff9900;">High</td></tr>
+          <tr><td><strong>Auth module — zero coverage</strong></td><td style="color:#ffa000;">Medium</td></tr>
+          <tr><td><strong>Integration tests mock-only</strong></td><td style="color:#ffa000;">Medium</td></tr>
+        </tbody>
+      </table>
+      <div class="metrics" style="margin-top:10px;">
+        <div class="metric" style="padding:8px 12px; min-width:70px;"><div class="metric-value" style="font-size:18px;">88/88</div><div class="metric-label">Tests Pass</div></div>
+        <div class="metric" style="padding:8px 12px; min-width:70px;"><div class="metric-value" style="font-size:18px;">63%</div><div class="metric-label">Real Cov</div></div>
+        <div class="metric" style="padding:8px 12px; min-width:70px;"><div class="metric-value" style="font-size:18px;">0%</div><div class="metric-label">Auth Cov</div></div>
+      </div>
+      <p style="font-size:11px; color:#8a9bb5; margin-top:6px; font-style:italic;">"Tests pass" ≠ "code is secure." This is what each submission could be hiding.</p>
+
+      <div style="margin-top:12px; padding:10px 12px; border-radius:8px; background:rgba(76,175,80,0.06); border:1px solid rgba(76,175,80,0.25);">
+        <div style="font-size:10px; color:#4caf50; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">
+          <i class="fa-solid fa-circle-check"></i>&nbsp; After the loop closed — re-audit run
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span style="font-size:11px; padding:3px 8px; background:rgba(76,175,80,0.12); border-radius:4px; color:#81c784;"><strong style="color:#4caf50;">8/8</strong> checks green</span>
+          <span style="font-size:11px; padding:3px 8px; background:rgba(76,175,80,0.12); border-radius:4px; color:#81c784;"><strong style="color:#4caf50;">88/88</strong> tests in 0.95s</span>
+          <span style="font-size:11px; padding:3px 8px; background:rgba(76,175,80,0.12); border-radius:4px; color:#81c784;"><strong style="color:#4caf50;">5</strong> CDK stacks synthesized</span>
+          <span style="font-size:11px; padding:3px 8px; background:rgba(76,175,80,0.12); border-radius:4px; color:#81c784;"><strong style="color:#4caf50;">HTTP 303</strong> demo live</span>
+        </div>
+        <p style="font-size:10px; color:#8a9bb5; margin-top:6px; margin-bottom:0; font-style:italic;">
+          <code style="font-size:10px;">Auto-Heal: false</code> — humans fixed it, the tool guided them. Diagnostic-grade, not just an auto-fixer.
+        </p>
+      </div>
+    </div>
+    <div>
+      <h3>Panel-Grade Hardening — Why Trust It at Scale</h3>
+      <ul>
+        <li><strong>Eval injection fix:</strong> error capture used <code>eval()</code> → replaced with a temp-file pattern (<code>set_error</code> / <code>get_error</code>). Tool won't execute untrusted error strings from submissions.</li>
+        <li><strong>JSON escaping:</strong> <code>json_escape</code> via <code>json.dumps</code> for every untrusted string written to the report. Safe to pipe to dashboards.</li>
+        <li><strong>Idempotent healing:</strong> running <code>--auto-heal</code> twice no longer stacks side effects. Safe to rerun on every submission.</li>
+        <li><strong>Per-repo venv isolation:</strong> hash-scoped <code>.audit-venv-&lt;hash&gt;</code> — audit the whole submission pool in parallel without interference.</li>
+        <li><strong>Fix suggestions built in:</strong> every failed check pairs the error with a pattern-matched remediation hint. Panel sees <em>what</em> broke <em>and</em> what to do.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-success">
+    <strong>Proof of value + proof of readiness.</strong> We caught real issues in our own repo (the tool works), then closed the security + safety gaps so the panel can run it on every submission with confidence.
+  </div>
+  <span class="slide-num">4</span>
+</div>
+
+<!-- SLIDE 6: How It Works -->
+<div class="slide">
+  <h2><span class="num">04</span> The Audit → Fix → Recheck Loop</h2>
+  <p class="slide-subtitle">8 checks · ~90 seconds · auto-heal with guard rails</p>
+
+  <div class="flow">
+    <div class="flow-step"><div class="step-num">1</div><div class="step-text">Run Audit</div></div>
+    <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    <div class="flow-step"><div class="step-num">2</div><div class="step-text">Findings</div></div>
+    <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    <div class="flow-step"><div class="step-num">3</div><div class="step-text">Fix / Heal</div></div>
+    <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    <div class="flow-step"><div class="step-num">4</div><div class="step-text">Recheck</div></div>
+    <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+    <div class="flow-step" style="border-color:rgba(76,175,80,0.4);background:rgba(76,175,80,0.06);"><div class="step-num" style="color:#4caf50;">✓</div><div class="step-text">Gate Pass</div></div>
+  </div>
+
+  <div style="background:rgba(76,175,80,0.06); border:1px solid rgba(76,175,80,0.25); border-radius:8px; padding:10px 14px; margin:-4px 0 14px 0;">
+    <div style="font-size:10px; color:#4caf50; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">
+      <i class="fa-solid fa-receipt"></i>&nbsp; Actual final run on our repo
+    </div>
+    <p style="font-size:12px; color:#c5d0e0; margin:0;">
+      <strong style="color:#ffffff;">8/8 passed</strong> — 88/88 tests in 0.95s · 5 CDK stacks synthesized · demo UI HTTP 303 · ruff clean · docs match reality. The abstract flow, walked end-to-end.
+    </p>
+  </div>
+
+  <div class="card-grid">
+    <div class="card"><div class="card-icon"><i class="fa-solid fa-flask-vial"></i></div><h4>Unit Tests + Coverage</h4><p>Pass rate, real line coverage, blind spot detection</p></div>
+    <div class="card"><div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div><h4>Security Scan</h4><p>Injection, eval, secrets, input validation</p></div>
+    <div class="card"><div class="card-icon"><i class="fa-solid fa-plug"></i></div><h4>Integration Check</h4><p>Real calls vs. mocked-only tests</p></div>
+    <div class="card"><div class="card-icon"><i class="fa-solid fa-heart-pulse"></i></div><h4>Auto-Heal</h4><p>Idempotent, dry-run first, confidence-gated</p></div>
+  </div>
+
+  <p style="font-size:12px;color:#6a7fa0;margin-top:8px;">Also: lint/style · function verification · verdict card (one-page grades) · full coverage analysis</p>
+  <span class="slide-num">5</span>
+</div>
+
+<!-- SLIDE 5: What We're Actually Showing -->
+<div class="slide">
+  <h2><span class="num">05</span> What We're Actually Showing</h2>
+  <p class="slide-subtitle">Substance, not surface</p>
+
+  <div class="card-grid">
+    <div class="card"><div class="card-icon"><i class="fa-solid fa-bug"></i></div><h4>We Audited Our Own Code</h4><p>Ran honest security checks. Found critical issues. Fixed them.</p></div>
+    <div class="card"><div class="card-icon"><i class="fa-solid fa-eye"></i></div><h4>Saw the Skill + Self-Heal</h4><p>Recognized the pattern could be packaged as a reusable power with auto-heal built in.</p></div>
+    <div class="card"><div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div><h4>Packaged the Process</h4><p>Hardened the code, upgraded reports with fix suggestions, and made it installable as a Kiro Power for anyone.</p></div>
+    <div class="card"><div class="card-icon"><i class="fa-solid fa-rotate"></i></div><h4>Auto-Heal With Guard Rails</h4><p>Not just finding — fixing. Idempotent, transparent, confidence-gated.</p></div>
+  </div>
+
+  <div class="callout callout-success" style="margin-top:16px;">
+    <strong>What this is:</strong>
+    <p style="margin-bottom:0;">A Kiro Power born from real pain — trying to get hackathon code past a publication security bar. Now it helps every team find issues, learn the fix, and ship more secure code faster.</p>
+  </div>
+
+  <p class="footer-link">
+    <strong style="color:#8a9bb5;">Power:</strong> <code>repo-audit-power</code> (Kiro Power, installable) &nbsp;&middot;&nbsp;
+    <strong style="color:#8a9bb5;">Blog:</strong> <code>P423030749</code> (APG submission)
+  </p>
+  <span class="slide-num">5</span>
+</div>
+
+<!-- SLIDE 6: How Vandana Used It -->
+<div class="slide">
+  <h2><span class="num">06</span> Teaching Tool &amp; How We Used It</h2>
+  <p class="slide-subtitle">Real findings from our 11,000-line Connect Analytics repo</p>
+
+  <h3>Before / After — What the Audit Caught</h3>
+
+  <div class="two-col" style="gap:12px;">
+    <div style="background:rgba(219,0,0,0.05); border:1px solid rgba(219,0,0,0.2); border-radius:8px; padding:12px;">
+      <p style="color:#ff6b6b; font-size:11px; font-weight:700; margin-bottom:6px;">&#10060; BEFORE — SQL Injection (Critical)</p>
+      <pre style="background:#0d1117; border-radius:6px; padding:10px; font-size:11px; color:#e8edf5; overflow-x:auto; margin:0;"><code># get_queue_health.py line 42
+where_clauses.append(
+  f"c.queue_name = '{queue_name}'"
+)
+# Attacker: '; DROP TABLE ctr; --</code></pre>
+    </div>
+    <div style="background:rgba(0,128,47,0.05); border:1px solid rgba(0,128,47,0.2); border-radius:8px; padding:12px;">
+      <p style="color:#4caf50; font-size:11px; font-weight:700; margin-bottom:6px;">&#9989; AFTER — Allowlist Validation</p>
+      <pre style="background:#0d1117; border-radius:6px; padding:10px; font-size:11px; color:#e8edf5; overflow-x:auto; margin:0;"><code># shared/validate.py
+VALID_QUEUES = {"Billing", "Support",
+  "Sales", "Returns", "VIP"}
+def validate_queue_name(value):
+  if value not in VALID_QUEUES:
+    return None
+  return value</code></pre>
+    </div>
+  </div>
+
+  <div class="two-col" style="gap:12px; margin-top:10px;">
+    <div style="background:rgba(219,0,0,0.05); border:1px solid rgba(219,0,0,0.2); border-radius:8px; padding:12px;">
+      <p style="color:#ff6b6b; font-size:11px; font-weight:700; margin-bottom:6px;">&#10060; BEFORE — Hardcoded Tokens</p>
+      <pre style="background:#0d1117; border-radius:6px; padding:10px; font-size:11px; color:#e8edf5; overflow-x:auto; margin:0;"><code># auth_stack.py — in source!
+DEFAULT_AUTH_TOKENS = {
+  "demo-supervisor-token": {
+    "user_id": "supervisor-001"
+  }
+}</code></pre>
+    </div>
+    <div style="background:rgba(0,128,47,0.05); border:1px solid rgba(0,128,47,0.2); border-radius:8px; padding:12px;">
+      <p style="color:#4caf50; font-size:11px; font-weight:700; margin-bottom:6px;">&#9989; AFTER — Secrets Manager</p>
+      <pre style="background:#0d1117; border-radius:6px; padding:10px; font-size:11px; color:#e8edf5; overflow-x:auto; margin:0;"><code># auth_stack.py — runtime secret
+self.auth_secret =
+  secretsmanager.Secret(self,
+    "AuthTokensSecret",
+    secret_name="connect-analytics/
+      auth-tokens")
+# Lambda reads via ARN</code></pre>
+    </div>
+  </div>
+
+  <h3 style="margin-top:14px;">The Audit Loop — Results</h3>
+  <div class="two-col" style="gap:12px;">
+    <div style="background:rgba(219,0,0,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px;">
+      <p style="color:#ff6b6b; font-size:11px; font-weight:700; margin-bottom:6px;">First Run</p>
+      <pre style="background:#0d1117; border-radius:6px; padding:8px; font-size:10px; color:#e8edf5; margin:0;"><code>| Check          | Status |
+|----------------|--------|
+| Environment    | PASS   |
+| Dependencies   | PASS   |
+| Synthetic Data | PASS   |
+| Test Suite     | PASS   | 88/88
+| Demo UI        | PASS   |
+| CDK Synth      | FAIL   | No Dockerfile
+| Linter         | FAIL   | 16 issues
+| Docs Accuracy  | FAIL   |
+Real coverage: 63% (auth = 0%)</code></pre>
+    </div>
+    <div style="background:rgba(0,128,47,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px;">
+      <p style="color:#4caf50; font-size:11px; font-weight:700; margin-bottom:6px;">After Fixes — All Green</p>
+      <pre style="background:#0d1117; border-radius:6px; padding:8px; font-size:10px; color:#e8edf5; margin:0;"><code>| Check          | Status |
+|----------------|--------|
+| Environment    | PASS   |
+| Dependencies   | PASS   |
+| Synthetic Data | PASS   | 42 files
+| Test Suite     | PASS   | 88/88
+| Demo UI        | PASS   | HTTP 303
+| CDK Synth      | PASS   | 5 stacks
+| Linter         | PASS   | 0 issues
+| Docs Accuracy  | PASS   |
+All checks passed in 0.95s</code></pre>
+    </div>
+  </div>
+
+  <div class="two-col" style="margin-top:12px;">
+    <div>
+      <h3><i class="fa-solid fa-graduation-cap"></i> &nbsp;For Learning</h3>
+      <ul>
+        <li>AI wrote <code>resources: ["*"]</code> — we didn't catch it until the audit</li>
+        <li>Every finding includes the secure pattern, not just the error</li>
+        <li>Auto-heal teaches before/after with explanation</li>
+      </ul>
+    </div>
+    <div>
+      <h3><i class="fa-solid fa-users"></i> &nbsp;For the Community</h3>
+      <ul>
+        <li><strong>Participants:</strong> self-audit before submission</li>
+        <li><strong>Mentors:</strong> consistent baseline across teams</li>
+        <li><strong>Publication:</strong> head start on security review</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-insight" style="margin-top:10px;">
+    <strong>The point isn't gatekeeping.</strong> It's accelerating the learning loop. We learned when we had to go back and fix — that's the entire point of a hackathon.
+  </div>
+  <span class="slide-num">6</span>
+</div>
+
+</body></html>
