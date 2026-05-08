@@ -692,110 +692,89 @@ body { background: var(--color-bg); }</style>
     <p style="margin-bottom:0;">A Kiro Power born from real pain — trying to get hackathon code past a publication security bar. Now it helps every team find issues, learn the fix, and ship more secure code faster.</p>
   </div>
 
-  <p class="footer-link">
+  <p style="font-size:12px; color:#6a7fa0; margin-top:12px;">
     <strong style="color:#8a9bb5;">Power:</strong> <code>repo-audit-power</code> (Kiro Power, installable) &nbsp;&middot;&nbsp;
     <strong style="color:#8a9bb5;">Blog:</strong> <code>P423030749</code> (APG submission)
   </p>
   <span class="slide-num">5</span>
 </div>
 
-<!-- SLIDE 6: How Vandana Used It -->
+<!-- SLIDE 6: How We Used It -->
 <div class="slide">
   <h2><span class="num">06</span> Teaching Tool &amp; How We Used It</h2>
-  <p class="slide-subtitle">Real findings from our 11,000-line Connect Analytics repo</p>
+  <p class="slide-subtitle">Real findings from our 11,000-line Connect Analytics repo (~90 seconds)</p>
 
-  <h3>Before / After — What the Audit Caught</h3>
-
-  <div class="two-col" style="gap:12px;">
-    <div style="background:rgba(219,0,0,0.05); border:1px solid rgba(219,0,0,0.2); border-radius:8px; padding:12px;">
-      <p style="color:#ff6b6b; font-size:11px; font-weight:700; margin-bottom:6px;">&#10060; BEFORE — SQL Injection (Critical)</p>
-      <pre style="background:#0d1117; border-radius:6px; padding:10px; font-size:11px; color:#e8edf5; overflow-x:auto; margin:0;"><code># get_queue_health.py line 42
-where_clauses.append(
+  <h3>Code Checks — Before / After</h3>
+  <table style="width:100%; font-size:12px; margin-bottom:14px;">
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <td style="padding:8px; color:#ff6b6b; width:50%; vertical-align:top;">
+        <strong>&#10060; SQL Injection (Critical)</strong><br>
+        <code style="font-size:10px; display:block; margin-top:4px; white-space:pre; background:#0d1117; padding:8px; border-radius:4px;">where_clauses.append(
   f"c.queue_name = '{queue_name}'"
 )
-# Attacker: '; DROP TABLE ctr; --</code></pre>
-    </div>
-    <div style="background:rgba(0,128,47,0.05); border:1px solid rgba(0,128,47,0.2); border-radius:8px; padding:12px;">
-      <p style="color:#4caf50; font-size:11px; font-weight:700; margin-bottom:6px;">&#9989; AFTER — Allowlist Validation</p>
-      <pre style="background:#0d1117; border-radius:6px; padding:10px; font-size:11px; color:#e8edf5; overflow-x:auto; margin:0;"><code># shared/validate.py
-VALID_QUEUES = {"Billing", "Support",
+# Attacker: '; DROP TABLE ctr; --</code>
+      </td>
+      <td style="padding:8px; color:#4caf50; width:50%; vertical-align:top;">
+        <strong>&#9989; Allowlist Validation</strong><br>
+        <code style="font-size:10px; display:block; margin-top:4px; white-space:pre; background:#0d1117; padding:8px; border-radius:4px;">VALID_QUEUES = {"Billing", "Support",
   "Sales", "Returns", "VIP"}
 def validate_queue_name(value):
   if value not in VALID_QUEUES:
-    return None
-  return value</code></pre>
-    </div>
-  </div>
-
-  <div class="two-col" style="gap:12px; margin-top:10px;">
-    <div style="background:rgba(219,0,0,0.05); border:1px solid rgba(219,0,0,0.2); border-radius:8px; padding:12px;">
-      <p style="color:#ff6b6b; font-size:11px; font-weight:700; margin-bottom:6px;">&#10060; BEFORE — Hardcoded Tokens</p>
-      <pre style="background:#0d1117; border-radius:6px; padding:10px; font-size:11px; color:#e8edf5; overflow-x:auto; margin:0;"><code># auth_stack.py — in source!
-DEFAULT_AUTH_TOKENS = {
-  "demo-supervisor-token": {
-    "user_id": "supervisor-001"
-  }
-}</code></pre>
-    </div>
-    <div style="background:rgba(0,128,47,0.05); border:1px solid rgba(0,128,47,0.2); border-radius:8px; padding:12px;">
-      <p style="color:#4caf50; font-size:11px; font-weight:700; margin-bottom:6px;">&#9989; AFTER — Secrets Manager</p>
-      <pre style="background:#0d1117; border-radius:6px; padding:10px; font-size:11px; color:#e8edf5; overflow-x:auto; margin:0;"><code># auth_stack.py — runtime secret
-self.auth_secret =
+    return None</code>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:8px; color:#ff6b6b; vertical-align:top;">
+        <strong>&#10060; Hardcoded Tokens</strong><br>
+        <code style="font-size:10px; display:block; margin-top:4px; white-space:pre; background:#0d1117; padding:8px; border-radius:4px;">DEFAULT_AUTH_TOKENS = {
+  "demo-supervisor-token": {...}
+}  # Visible in CloudFormation!</code>
+      </td>
+      <td style="padding:8px; color:#4caf50; vertical-align:top;">
+        <strong>&#9989; Secrets Manager</strong><br>
+        <code style="font-size:10px; display:block; margin-top:4px; white-space:pre; background:#0d1117; padding:8px; border-radius:4px;">self.auth_secret =
   secretsmanager.Secret(self,
-    "AuthTokensSecret",
-    secret_name="connect-analytics/
-      auth-tokens")
-# Lambda reads via ARN</code></pre>
-    </div>
-  </div>
+    "AuthTokensSecret")
+# Lambda reads via ARN at runtime</code>
+      </td>
+    </tr>
+  </table>
 
-  <h3 style="margin-top:14px;">The Audit Loop — Results</h3>
-  <div class="two-col" style="gap:12px;">
-    <div style="background:rgba(219,0,0,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px;">
-      <p style="color:#ff6b6b; font-size:11px; font-weight:700; margin-bottom:6px;">First Run</p>
-      <pre style="background:#0d1117; border-radius:6px; padding:8px; font-size:10px; color:#e8edf5; margin:0;"><code>| Check          | Status |
-|----------------|--------|
-| Environment    | PASS   |
-| Dependencies   | PASS   |
-| Synthetic Data | PASS   |
-| Test Suite     | PASS   | 88/88
-| Demo UI        | PASS   |
-| CDK Synth      | FAIL   | No Dockerfile
-| Linter         | FAIL   | 16 issues
-| Docs Accuracy  | FAIL   |
-Real coverage: 63% (auth = 0%)</code></pre>
-    </div>
-    <div style="background:rgba(0,128,47,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:10px;">
-      <p style="color:#4caf50; font-size:11px; font-weight:700; margin-bottom:6px;">After Fixes — All Green</p>
-      <pre style="background:#0d1117; border-radius:6px; padding:8px; font-size:10px; color:#e8edf5; margin:0;"><code>| Check          | Status |
-|----------------|--------|
-| Environment    | PASS   |
-| Dependencies   | PASS   |
-| Synthetic Data | PASS   | 42 files
-| Test Suite     | PASS   | 88/88
-| Demo UI        | PASS   | HTTP 303
-| CDK Synth      | PASS   | 5 stacks
-| Linter         | PASS   | 0 issues
-| Docs Accuracy  | PASS   |
-All checks passed in 0.95s</code></pre>
-    </div>
-  </div>
+  <h3>Audit Results</h3>
+  <table style="width:100%; font-size:11px;">
+    <tr style="border-bottom:1px solid rgba(255,255,255,0.1);">
+      <td style="padding:6px; width:50%; vertical-align:top;">
+        <strong style="color:#ff6b6b;">First Run — 3 Failures</strong><br>
+        <code style="font-size:10px; display:block; margin-top:4px; white-space:pre; background:#0d1117; padding:6px; border-radius:4px;">CDK Synth   FAIL (No Dockerfile)
+Linter      FAIL (16 issues)
+Docs        FAIL
+Coverage: 63% | Auth: 0%</code>
+      </td>
+      <td style="padding:6px; width:50%; vertical-align:top;">
+        <strong style="color:#4caf50;">After Fixes — All Green</strong><br>
+        <code style="font-size:10px; display:block; margin-top:4px; white-space:pre; background:#0d1117; padding:6px; border-radius:4px;">CDK Synth   PASS (5 stacks)
+Linter      PASS (0 issues)
+Docs        PASS
+All 8/8 in 0.95s</code>
+      </td>
+    </tr>
+  </table>
 
-  <div class="two-col" style="margin-top:12px;">
+  <div class="two-col" style="margin-top:14px;">
     <div>
       <h3><i class="fa-solid fa-graduation-cap"></i> &nbsp;For Learning</h3>
       <ul>
-        <li>AI wrote <code>resources: ["*"]</code> — we didn't catch it until the audit</li>
-        <li>Every finding includes the secure pattern, not just the error</li>
-        <li>Auto-heal teaches before/after with explanation</li>
+        <li>AI wrote <code>resources: ["*"]</code> — audit caught it</li>
+        <li>Every finding shows the secure pattern</li>
+        <li>"Tests pass" &#8800; "code is secure"</li>
       </ul>
     </div>
     <div>
       <h3><i class="fa-solid fa-users"></i> &nbsp;For the Community</h3>
       <ul>
         <li><strong>Participants:</strong> self-audit before submission</li>
-        <li><strong>Mentors:</strong> consistent baseline across teams</li>
-        <li><strong>Publication:</strong> head start on security review</li>
+        <li><strong>Mentors:</strong> consistent baseline</li>
+        <li><strong>Publication:</strong> security review head start</li>
       </ul>
     </div>
   </div>
