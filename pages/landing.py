@@ -514,13 +514,24 @@ with tab_team:
     _cert1 = _badges_dir / "cert1.png"
     _cert2 = _badges_dir / "cert2.png"
 
+    import base64 as _b64
+    _badge_imgs = []
+    for _bp in (_cert1, _cert2):
+        if _bp.exists():
+            _enc = _b64.b64encode(_bp.read_bytes()).decode("utf-8")
+            _badge_imgs.append(
+                f'<img src="data:image/png;base64,{_enc}" '
+                'style="width:60px;height:60px;object-fit:contain;" />'
+            )
+    _badges_html = (
+        '<div style="display:flex;justify-content:center;gap:8px;margin-top:10px;">'
+        + "".join(_badge_imgs)
+        + "</div>"
+    ) if _badge_imgs else ""
+
     def _render_badges():
-        imgs = [str(p) for p in (_cert1, _cert2) if p.exists()]
-        if imgs:
-            cols = st.columns(len(imgs))
-            for col, img in zip(cols, imgs):
-                with col:
-                    st.image(img, width=64)
+        if _badges_html:
+            st.markdown(_badges_html, unsafe_allow_html=True)
 
     t1, t2, t3 = st.columns(3)
     with t1:
