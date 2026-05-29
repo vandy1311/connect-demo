@@ -267,6 +267,12 @@ with st.sidebar:
 
 
 # ---------------------------------------------------------------------------
+# Hero banner
+from pathlib import Path as _BannerPath
+_banner = _BannerPath(__file__).parent.parent / "assets" / "banner.jpg"
+if _banner.exists():
+    st.image(str(_banner), use_container_width=True)
+
 # Main content — Agent tabs
 # ---------------------------------------------------------------------------
 st.markdown("""
