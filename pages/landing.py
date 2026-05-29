@@ -556,29 +556,45 @@ with tab_team:
         st.caption("Lead Developer & Architect")
         _render_badges()
 
-    # ── Accolades ──
+    # ── Our Story ──
     st.write("")
-    st.markdown("""<div style="margin-top:2rem; margin-bottom:0.75rem;">
+    st.markdown("""<div style="margin-top:2rem; margin-bottom:1rem;">
     <div style="font-size:1.1rem; font-weight:700; color:#e2e8f0;">🏆 Accolades</div>
-    <div style="font-size:0.8rem; color:#64748b;">Side projects and tools built by the team</div>
+    <div style="font-size:0.8rem; color:#64748b;">How we got from zero to shipped</div>
     </div>""", unsafe_allow_html=True)
 
-    st.markdown("""<div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:1.25rem 1.5rem;">
-    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
-        <span style="background:rgba(59,130,246,0.15); color:#3b82f6; font-size:0.7rem; font-weight:700;
-        padding:3px 10px; border-radius:100px; letter-spacing:0.5px;">YUNJIE CHEN</span>
-        <span style="color:#e2e8f0; font-weight:700; font-size:0.95rem;">Pre-Share Check</span>
-    </div>
-    <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:10px; line-height:1.5;">
-        A one-command sanity check for hackathon Python projects. Runs 7 checks for secrets,
-        leftover TODOs, security holes, AI-generated code smells, and repo bloat — so you don't ship
-        the equivalent of a typo in the subject line. Output is copy-pasteable back into Kiro or Claude Code to fix what it finds.
-    </div>
-    <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:8px 12px;
-    font-family:ui-monospace,SFMono-Regular,monospace; font-size:0.78rem; color:#cbd5e1; overflow-x:auto;">
-        repo-audit-power/scripts/pre-share-check.sh /path/to/your-project
-    </div>
-    </div>""", unsafe_allow_html=True)
+    _step_card = """<div style="background:#1e293b; border:1px solid #334155; border-radius:12px;
+    padding:1.1rem 1.3rem; margin-bottom:10px; display:flex; gap:14px; align-items:flex-start;">
+        <div style="flex-shrink:0; width:32px; height:32px; border-radius:50%;
+        background:rgba(59,130,246,0.15); color:#3b82f6; display:flex; align-items:center;
+        justify-content:center; font-weight:700; font-size:0.9rem; border:1px solid rgba(59,130,246,0.3);">{n}</div>
+        <div style="flex:1;">
+            <div style="font-weight:700; color:#e2e8f0; font-size:0.95rem; margin-bottom:4px;">{title}</div>
+            <div style="color:#94a3b8; font-size:0.85rem; line-height:1.55;">{body}</div>
+            {extra}
+        </div>
+    </div>"""
+
+    st.markdown(_step_card.format(
+        n="1",
+        title="Earned our Amazon Connect certifications",
+        body="Started by getting deep on Amazon Connect Reporting & Analytics and Amazon Connect AI Fundamentals — the foundation we'd build on.",
+        extra="",
+    ), unsafe_allow_html=True)
+
+    st.markdown(_step_card.format(
+        n="2",
+        title="Started building — and Yunjie's tool kept us honest",
+        body="As we built, Yunjie shared <b>Pre-Share Check</b>, a one-command audit that scans for secrets, leftover TODOs, security holes, and AI-generated code smells. It made our code production-ready before every share.",
+        extra='<div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:8px 12px; margin-top:10px; font-family:ui-monospace,SFMono-Regular,monospace; font-size:0.78rem; color:#cbd5e1; overflow-x:auto;">repo-audit-power/scripts/pre-share-check.sh /path/to/your-project</div>',
+    ), unsafe_allow_html=True)
+
+    st.markdown(_step_card.format(
+        n="3",
+        title="Shared with the CSM community and published on LinkedIn",
+        body='Posted the tool in our CSM Slack channel and shared learnings as blogs on the <a href="https://www.linkedin.com/in/aws-c2sm/?skipRedirect=true" target="_blank" style="color:#3b82f6; text-decoration:none; font-weight:600;">AWS C2SM LinkedIn</a> so other CSMs could ship faster too.',
+        extra="",
+    ), unsafe_allow_html=True)
 
     st.write("")
     st.markdown("""<div style="text-align:center; background:#1e293b; border:1px solid #334155; border-radius:12px; padding:1.5rem; margin-top:1rem;">
