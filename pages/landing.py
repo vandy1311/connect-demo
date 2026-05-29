@@ -15,6 +15,12 @@ div[data-testid="stMetric"] {
 .stTabs [data-baseweb="tab"] { font-weight: 600; font-size: 0.9rem; }
 </style>""", unsafe_allow_html=True)
 
+# Hero banner
+from pathlib import Path as _BannerPath
+_banner = _BannerPath(__file__).parent.parent / "assets" / "banner.jpg"
+if _banner.exists():
+    st.image(str(_banner), use_container_width=True)
+
 # ── Tabs at top ──
 tab_overview, tab_agents, tab_arch, tab_roi, tab_team = st.tabs(
     ["📊 Overview", "🤖 Agents", "🏗️ Architecture", "💰 ROI", "👥 About Us"]
