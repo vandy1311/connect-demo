@@ -510,6 +510,18 @@ with tab_team:
     from pathlib import Path as _TeamPath
     _assets = _TeamPath(__file__).parent.parent / "assets"
 
+    _badges_dir = _assets / "badges"
+    _cert1 = _badges_dir / "cert1.png"
+    _cert2 = _badges_dir / "cert2.png"
+
+    def _render_badges():
+        imgs = [str(p) for p in (_cert1, _cert2) if p.exists()]
+        if imgs:
+            cols = st.columns(len(imgs))
+            for col, img in zip(cols, imgs):
+                with col:
+                    st.image(img, width=64)
+
     t1, t2, t3 = st.columns(3)
     with t1:
         _bb = _assets / "brigette.jpeg"
@@ -517,18 +529,21 @@ with tab_team:
             st.image(str(_bb), width=100)
         st.markdown("**Brigette Bucke**")
         st.caption("Product & Strategy Lead")
+        _render_badges()
     with t2:
         _yc = _assets / "yunji.jpeg"
         if _yc.exists():
             st.image(str(_yc), width=100)
         st.markdown("**Yunjie Chen**")
         st.caption("QA & Testing Lead")
+        _render_badges()
     with t3:
         _vt = _assets / "vandana_aws.jpeg"
         if _vt.exists():
             st.image(str(_vt), width=100)
         st.markdown("**Vandana Tewani**")
         st.caption("Lead Developer & Architect")
+        _render_badges()
 
     st.write("")
     st.markdown("""<div style="text-align:center; background:#1e293b; border:1px solid #334155; border-radius:12px; padding:1.5rem; margin-top:1rem;">
