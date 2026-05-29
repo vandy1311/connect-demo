@@ -503,6 +503,13 @@ with tab_roi:
 # 👥 TEAM
 # ═══════════════════════════════════════════════════════════════
 with tab_team:
+    # ── Banner poster ──
+    from pathlib import Path as _PosterPath
+    _poster = _PosterPath(__file__).parent.parent / "assets" / "team_poster.jpg"
+    if _poster.exists():
+        st.image(str(_poster), use_container_width=True)
+        st.write("")
+
     st.markdown("### Built by Team FIFA")
     st.caption("CSM Agentic Hackathon 2026")
     st.write("")
