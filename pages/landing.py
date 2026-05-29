@@ -567,6 +567,18 @@ with tab_team:
     if _poster.exists():
         st.image(str(_poster), use_container_width=True)
 
+    # ── Read the 3-part LinkedIn series ──
+    _p1 = "https://www.linkedin.com/posts/aws-c2sm_aidlc-agenticai-aws-ugcPost-7460805669726740480-eJeD/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAD5CCUBr2srzgr2QKY6Z0AX5CdodvFZtG0"
+    _p2 = "https://www.linkedin.com/posts/aws-c2sm_aidlc-agenticai-aws-ugcPost-7460811725563539457-C0Sw/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAD5CCUBr2srzgr2QKY6Z0AX5CdodvFZtG0"
+    _p3 = "https://www.linkedin.com/posts/aws-c2sm_buildinpublic-aidlc-agenticai-ugcPost-7460815102972174336-gM8z/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAD5CCUBr2srzgr2QKY6Z0AX5CdodvFZtG0"
+    _lp1, _lp2, _lp3 = st.columns(3)
+    with _lp1:
+        st.markdown(f"[📖 **Read Part 1** — The playbook]({_p1})")
+    with _lp2:
+        st.markdown(f"[�� **Read Part 2** — The product]({_p2})")
+    with _lp3:
+        st.markdown(f"[🧱 **Read Part 3** — Build in public]({_p3})")
+
     # ── Accolades ──
     st.write("")
     st.markdown("""<div style="margin-top:2rem; margin-bottom:1rem;">
