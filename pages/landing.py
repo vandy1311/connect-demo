@@ -17,7 +17,7 @@ div[data-testid="stMetric"] {
 
 # ── Tabs at top ──
 tab_overview, tab_agents, tab_arch, tab_roi, tab_team = st.tabs(
-    ["📊 Overview", "🤖 Agents", "🏗️ Architecture", "💰 ROI", "👥 Team"]
+    ["📊 Overview", "🤖 Agents", "🏗️ Architecture", "💰 ROI", "👥 About Us"]
 )
 
 # ═══════════════════════════════════════════════════════════════
