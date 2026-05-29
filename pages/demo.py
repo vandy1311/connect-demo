@@ -267,11 +267,30 @@ with st.sidebar:
 
 
 # ---------------------------------------------------------------------------
-# Hero banner
+# Hero banner — full viewport width
+import base64 as _b64banner
 from pathlib import Path as _BannerPath
 _banner = _BannerPath(__file__).parent.parent / "assets" / "banner.jpg"
 if _banner.exists():
-    st.image(str(_banner), use_container_width=True)
+    _b = _b64banner.b64encode(_banner.read_bytes()).decode("utf-8")
+    st.markdown(
+        f"""<style>
+        .hero-banner-wrap {{
+            position: relative;
+            width: 100vw;
+            left: 50%;
+            margin-left: -50vw;
+            margin-top: -1rem;
+            margin-bottom: 1.5rem;
+            line-height: 0;
+        }}
+        .hero-banner-wrap img {{
+            width: 100%; height: auto; display: block;
+        }}
+        </style>
+        <div class="hero-banner-wrap"><img src="data:image/jpeg;base64,{_b}" alt="Team FIFA banner"/></div>""",
+        unsafe_allow_html=True,
+    )
 
 # Main content — Agent tabs
 # ---------------------------------------------------------------------------
