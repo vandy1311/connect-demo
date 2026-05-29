@@ -567,6 +567,18 @@ with tab_team:
     if _poster.exists():
         st.image(str(_poster), use_container_width=True)
 
+    # Yunjie's Pre-Share Check tool
+    _tool_url = "https://amazon.enterprise.slack.com/files/U084U00N0RL/F0B2W0M7GN7/hackathon-audit-power.zip"
+    st.markdown(
+        '<div style="background:#1e293b; border:1px solid #334155; border-radius:10px; '
+        'padding:10px 14px; margin-top:10px; font-size:0.85rem; color:#cbd5e1;">'
+        '🔧 <b>Pre-Share Check</b> — Yunjie’s one-command code audit tool. '
+        f'<a href="{_tool_url}" target="_blank" '
+        'style="color:#3b82f6; text-decoration:underline; font-weight:600;">Download zip from Slack →</a>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
+
     # ── Read the 3-part LinkedIn series ──
     _p1 = "https://www.linkedin.com/posts/aws-c2sm_aidlc-agenticai-aws-ugcPost-7460805669726740480-eJeD/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAD5CCUBr2srzgr2QKY6Z0AX5CdodvFZtG0"
     _p2 = "https://www.linkedin.com/posts/aws-c2sm_aidlc-agenticai-aws-ugcPost-7460811725563539457-C0Sw/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAD5CCUBr2srzgr2QKY6Z0AX5CdodvFZtG0"
