@@ -556,6 +556,30 @@ with tab_team:
         st.caption("Lead Developer & Architect")
         _render_badges()
 
+    # ── Accolades ──
+    st.write("")
+    st.markdown("""<div style="margin-top:2rem; margin-bottom:0.75rem;">
+    <div style="font-size:1.1rem; font-weight:700; color:#e2e8f0;">🏆 Accolades</div>
+    <div style="font-size:0.8rem; color:#64748b;">Side projects and tools built by the team</div>
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("""<div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:1.25rem 1.5rem;">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+        <span style="background:rgba(59,130,246,0.15); color:#3b82f6; font-size:0.7rem; font-weight:700;
+        padding:3px 10px; border-radius:100px; letter-spacing:0.5px;">YUNJIE CHEN</span>
+        <span style="color:#e2e8f0; font-weight:700; font-size:0.95rem;">Pre-Share Check</span>
+    </div>
+    <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:10px; line-height:1.5;">
+        A one-command sanity check for hackathon Python projects. Runs 7 checks for secrets,
+        leftover TODOs, security holes, AI-generated code smells, and repo bloat — so you don't ship
+        the equivalent of a typo in the subject line. Output is copy-pasteable back into Kiro or Claude Code to fix what it finds.
+    </div>
+    <div style="background:#0f172a; border:1px solid #334155; border-radius:8px; padding:8px 12px;
+    font-family:ui-monospace,SFMono-Regular,monospace; font-size:0.78rem; color:#cbd5e1; overflow-x:auto;">
+        repo-audit-power/scripts/pre-share-check.sh /path/to/your-project
+    </div>
+    </div>""", unsafe_allow_html=True)
+
     st.write("")
     st.markdown("""<div style="text-align:center; background:#1e293b; border:1px solid #334155; border-radius:12px; padding:1.5rem; margin-top:1rem;">
     <div style="font-size:0.85rem; color:#94a3b8;">Built with <span style="color:#3b82f6; font-weight:600;">AI-DLC methodology</span></div>
