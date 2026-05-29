@@ -503,13 +503,6 @@ with tab_roi:
 # 👥 TEAM
 # ═══════════════════════════════════════════════════════════════
 with tab_team:
-    # ── Banner poster ──
-    from pathlib import Path as _PosterPath
-    _poster = _PosterPath(__file__).parent.parent / "assets" / "team_poster.jpg"
-    if _poster.exists():
-        st.image(str(_poster), use_container_width=True)
-        st.write("")
-
     st.markdown("### Built by Team FIFA")
     st.caption("CSM Agentic Hackathon 2026")
     st.write("")
@@ -563,7 +556,18 @@ with tab_team:
         st.caption("Lead Developer & Architect")
         _render_badges()
 
-    # ── Our Story ──
+    # ── Our Story (poster) ──
+    from pathlib import Path as _PosterPath
+    _poster = _PosterPath(__file__).parent.parent / "assets" / "team_poster.jpg"
+    st.write("")
+    st.markdown("""<div style="margin-top:2rem; margin-bottom:0.75rem;">
+    <div style="font-size:1.1rem; font-weight:700; color:#e2e8f0;">📖 Our Story</div>
+    <div style="font-size:0.8rem; color:#64748b;">From a Slack-channel question to a working platform — in pictures</div>
+    </div>""", unsafe_allow_html=True)
+    if _poster.exists():
+        st.image(str(_poster), use_container_width=True)
+
+    # ── Accolades ──
     st.write("")
     st.markdown("""<div style="margin-top:2rem; margin-bottom:1rem;">
     <div style="font-size:1.1rem; font-weight:700; color:#e2e8f0;">🏆 Accolades</div>
