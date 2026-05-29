@@ -1212,7 +1212,7 @@ with tab_auto:
             "title": "🔴 The Day 2 Problem",
             "narration": "Every Amazon Connect deployment hits the same wall on Day 2. The data is there, but supervisors check five dashboards to answer one question. It takes 20 minutes. Quality analysts sample only 2 percent of calls. Workforce planners need a data engineer just to forecast next Monday.",
             "content": """
-**The problem we're solving:**
+**The problem we\'re solving:**
 
 | Before | After |
 |--------|-------|
@@ -1227,7 +1227,7 @@ with tab_auto:
         {
             "title": "🟢 Supervisor Agent — Queue Health",
             "narration": "The Supervisor Agent monitors queue health in real time. It queries 10,000 contact trace records via SQL and returns SLA percentages, wait times, and abandonment rates. When a threshold is breached, it fires a Slack alert in under 60 seconds.",
-            "content": None,  # Will run live query
+            "content": None,
             "query": ("Supervisor", "Show me queue health"),
             "duration": 50,
         },
@@ -1258,20 +1258,97 @@ with tab_auto:
             "duration": 45,
         },
         {
-            "title": "🏗️ Architecture & Deployment",
-            "narration": "The entire platform deploys with one CDK command in 8 minutes. Five stacks: Auth, Data, Knowledge Base, Agents, and Alerts. No CloudFront, no Terraform. Total cost: 34 dollars per month. The code is open source on GitHub.",
+            "title": "📊 Operations Dashboard",
+            "narration": "A single pane of glass for the entire platform. Live agent status, queue health, recent alerts, and the alert pipeline funnel — all in real time. Operations teams stop checking five dashboards. They check one.",
             "content": """
-**5 CDK Stacks — One Command:**
-- `ConnectAnalytics-Auth` → Secrets Manager
-- `ConnectAnalytics-Data` → S3 + Glue + Athena
-- `ConnectAnalytics-KB` → Bedrock Knowledge Base
-- `ConnectAnalytics-Agents` → AgentCore Gateway + 3 agents + 9 Lambda tools
-- `ConnectAnalytics-Alerts` → EventBridge → SNS → Slack
+**What the Dashboard shows:**
+- 🟢 Supervisor · 🟠 Quality · 🔵 WFM — each with live response times and tool counts
+- Active SLA breaches and abandonment hotspots, refreshed continuously
+- Alert pipeline funnel: queries → detections → Slack notifications delivered
+- Daily query volume and average answer latency
 
-**Deploy:** `cdk deploy --all` (~8 minutes)
-**Cost:** ~$34/month | **Coverage:** 100% of calls | **Speed:** 2-second answers
+Open the **Dashboard** tab to see the live view.
+            """,
+            "duration": 40,
+        },
+        {
+            "title": "💰 ROI — $150K/year → $34/month",
+            "narration": "The ROI calculator shows what a 100-agent contact center saves by replacing a custom analytics pipeline with this platform. Half a million dollars in annual savings against $34 per month to run.",
+            "content": """
+**Annual savings for a 100-agent contact center:**
+- Reduced abandonment recovery: **+$262K**
+- Lower agent attrition (early burnout detection): **+$56K**
+- Pipeline replacement (no more custom ETL team): **+$128K**
+- Platform cost: **−$408/year** ($34/month)
+
+**Net savings: ~$500K/year** · **Payback: under 1 month**
             """,
             "duration": 45,
+        },
+        {
+            "title": "📚 Knowledge Base — Grounded Answers",
+            "narration": "Every agent answer is grounded in a Bedrock Knowledge Base populated with your contact center playbooks, SOPs, and policies. No hallucinations. Citations on every response. RAG over your own documents, with semantic chunking and hybrid search.",
+            "content": """
+**Knowledge Base highlights:**
+- Bedrock managed RAG — no vector DB to operate
+- Semantic chunking + hybrid search (keyword + vector)
+- Citations rendered inline with every agent answer
+- Drop in your own PDFs, SOPs, scripts — re-index in minutes
+
+The KB tab includes a sample query and shows the retrieved passages.
+            """,
+            "duration": 45,
+        },
+        {
+            "title": "⚖️ Before / After",
+            "narration": "Side by side: the world before, where supervisors discover SLA breaches 15 minutes late and quality analysts review 2 percent of calls; and the world after, where AI analyzes 100 percent of calls and Slack alerts fire in under 60 seconds.",
+            "content": """
+**Before vs After at a glance:**
+
+| Metric | Before | After |
+|---|---|---|
+| Time to insight | 20 min | 2 sec |
+| Call coverage | 2% manual QA | 100% AI-analyzed |
+| SLA breach detection | 15+ min late | Under 60 sec |
+| Burnout detection | After resignation | 8 days early |
+| Monthly cost | $12K+ | $34 |
+            """,
+            "duration": 40,
+        },
+        {
+            "title": "🚀 Deploy in 8 Minutes",
+            "narration": "One CDK command deploys the entire platform. Five stacks. Eight minutes. No manual configuration. No CloudFront. No Terraform. The CDK automatically provisions Secrets Manager, S3, Glue, Athena, Bedrock Knowledge Base, AgentCore Gateway, three agents, nine Lambda tools, EventBridge rules, SNS topics, and the Slack webhook integration.",
+            "content": """
+**Deploy command:**
+```
+cdk deploy --all
+```
+
+**What happens:**
+- ✅ Auth stack: Secrets Manager + IAM roles
+- ✅ Data stack: S3 data lake + Glue catalog + Athena workgroup
+- ✅ Knowledge Base stack: Bedrock KB + ingestion job
+- ✅ Agents stack: AgentCore Gateway + 3 agents + 9 Lambda tools
+- ✅ Alerts stack: 5 EventBridge rules → SNS → Slack formatter
+
+**Time:** ~8 minutes · **Cost:** ~$34/month · **Teardown:** `cdk destroy --all`
+            """,
+            "duration": 50,
+        },
+        {
+            "title": "🏗️ Architecture",
+            "narration": "End to end: Amazon Connect streams contact trace records, agent events, and Contact Lens transcripts into S3. Glue catalogs the data. Athena queries Parquet at scale. Bedrock AgentCore orchestrates three agents — Supervisor on Claude Sonnet, Quality on Claude Sonnet, WFM on Nova Lite — each calling Lambda tools. EventBridge watches for breach signals and routes them through SNS to Slack. Open source on GitHub. The whole platform is serverless.",
+            "content": """
+**Five layers, fully serverless:**
+1. **Data ingestion** — Amazon Connect → Kinesis → S3 (CTR, agent events, Contact Lens)
+2. **Storage & catalog** — S3 + Glue + Athena (Parquet, partition projection)
+3. **Knowledge** — Bedrock Knowledge Base (RAG over playbooks)
+4. **Agents** — Bedrock AgentCore Gateway + 3 agents + 9 Lambda tools
+5. **Alerts** — EventBridge → SNS → Slack formatter
+
+Open the **Architecture** tab for the full diagram.
+            """,
+            "duration": 50,
         },
     ]
 
