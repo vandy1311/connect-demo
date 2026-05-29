@@ -524,7 +524,7 @@ with tab_team:
                 'style="width:60px;height:60px;object-fit:contain;" />'
             )
     _badges_html = (
-        '<div style="display:flex;justify-content:center;gap:8px;margin-top:10px;">'
+        '<div style="display:flex;justify-content:flex-start;gap:8px;margin-top:10px;">'
         + "".join(_badge_imgs)
         + "</div>"
     ) if _badge_imgs else ""
