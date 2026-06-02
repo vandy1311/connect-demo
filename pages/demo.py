@@ -1187,6 +1187,8 @@ with tab_auto:
 
     if "demo_step" not in st.session_state:
         st.session_state.demo_step = 0
+    if "demo_started" not in st.session_state:
+        st.session_state.demo_started = False
 
     DEMO_STEPS = [
         {
@@ -1336,62 +1338,73 @@ Open the **Architecture** tab for the full diagram.
     step = st.session_state.demo_step
     total = len(DEMO_STEPS)
 
-    # Progress bar
-    st.progress(step / total if step < total else 1.0, text=f"Step {min(step+1, total)} of {total}")
-
-    if step < total:
-        s = DEMO_STEPS[step]
-        st.markdown(f"## {s['title']}")
-
-        # Voice narration
-        if s.get("narration"):
-            voice_audio = try_voice_synthesis(s["narration"])
-            if voice_audio:
-                st.audio(voice_audio, format="audio/mpeg", autoplay=True)
-            else:
-                st.info(f"🎙️ _{s['narration']}_")
-
-        # Content
-        if s.get("content"):
-            st.markdown(s["content"])
-
-        if s.get("query"):
-            agent, query = s["query"]
-            with st.spinner(f"{agent} Agent thinking..."):
-                import time as _t
-                _t.sleep(1.0)
-                if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
-                    response = live_agent_response(agent, query)
-                else:
-                    response = simulate_agent_response(agent, query)
-                st.markdown(response["text"])
-                if "metrics" in response:
-                    cols = st.columns(len(response["metrics"]))
-                    for i, m in enumerate(response["metrics"]):
-                        cols[i].metric(m["label"], m["value"], m.get("delta", ""))
-
-        # Navigation
+    if not st.session_state.demo_started:
         st.write("")
-        c1, c2, c3 = st.columns([1, 1, 1])
-        with c1:
-            if step > 0 and st.button("⬅️ Previous", key=f"prev_{step}"):
-                st.session_state.demo_step = step - 1
-                st.rerun()
-        with c2:
-            if st.button("⏭️ Next Step" if step < total - 1 else "🎉 Finish", key=f"next_{step}", type="primary", use_container_width=True):
-                st.session_state.demo_step = step + 1
-                st.rerun()
-        with c3:
-            if st.button("⏹️ Reset", key=f"reset_{step}"):
+        _pcol1, _pcol2, _pcol3 = st.columns([1, 1, 1])
+        with _pcol2:
+            if st.button("▶️ Play Demo", key="demo_play", type="primary", use_container_width=True):
+                st.session_state.demo_started = True
                 st.session_state.demo_step = 0
                 st.rerun()
     else:
-        st.markdown("## 🎉 Demo Complete!")
-        st.success("Three agents. One CDK command. Every answer in 2 seconds. $34/month.")
-        st.balloons()
-        if st.button("🔄 Run Again", type="primary"):
-            st.session_state.demo_step = 0
-            st.rerun()
+        # Progress bar
+        st.progress(step / total if step < total else 1.0, text=f"Step {min(step+1, total)} of {total}")
+
+        if step < total:
+            s = DEMO_STEPS[step]
+            st.markdown(f"## {s['title']}")
+
+            # Voice narration
+            if s.get("narration"):
+                voice_audio = try_voice_synthesis(s["narration"])
+                if voice_audio:
+                    st.audio(voice_audio, format="audio/mpeg", autoplay=True)
+                else:
+                    st.info(f"🎙️ _{s['narration']}_")
+
+            # Content
+            if s.get("content"):
+                st.markdown(s["content"])
+
+            if s.get("query"):
+                agent, query = s["query"]
+                with st.spinner(f"{agent} Agent thinking..."):
+                    import time as _t
+                    _t.sleep(1.0)
+                    if _LIVE_MODE and st.session_state.get("live_mode_toggle", False):
+                        response = live_agent_response(agent, query)
+                    else:
+                        response = simulate_agent_response(agent, query)
+                    st.markdown(response["text"])
+                    if "metrics" in response:
+                        cols = st.columns(len(response["metrics"]))
+                        for i, m in enumerate(response["metrics"]):
+                            cols[i].metric(m["label"], m["value"], m.get("delta", ""))
+
+            # Navigation
+            st.write("")
+            c1, c2, c3 = st.columns([1, 1, 1])
+            with c1:
+                if step > 0 and st.button("⬅️ Previous", key=f"prev_{step}"):
+                    st.session_state.demo_step = step - 1
+                    st.rerun()
+            with c2:
+                if st.button("⏭️ Next Step" if step < total - 1 else "🎉 Finish", key=f"next_{step}", type="primary", use_container_width=True):
+                    st.session_state.demo_step = step + 1
+                    st.rerun()
+            with c3:
+                if st.button("⏹️ Reset", key=f"reset_{step}"):
+                    st.session_state.demo_step = 0
+                    st.session_state.demo_started = False
+                    st.rerun()
+        else:
+            st.markdown("## 🎉 Demo Complete!")
+            st.success("Three agents. One CDK command. Every answer in 2 seconds. $34/month.")
+            st.balloons()
+            if st.button("🔄 Run Again", type="primary"):
+                st.session_state.demo_step = 0
+                st.session_state.demo_started = False
+                st.rerun()
 
 with tab_sup:
 
