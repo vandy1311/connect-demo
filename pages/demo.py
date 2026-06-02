@@ -1187,8 +1187,6 @@ with tab_auto:
 
     if "demo_step" not in st.session_state:
         st.session_state.demo_step = 0
-    if "demo_started" not in st.session_state:
-        st.session_state.demo_started = False
 
     DEMO_STEPS = [
         {
@@ -1338,17 +1336,6 @@ Open the **Architecture** tab for the full diagram.
     step = st.session_state.demo_step
     total = len(DEMO_STEPS)
 
-    # Show Play button until user starts the demo
-    if not st.session_state.demo_started:
-        st.write("")
-        c1, c2, c3 = st.columns([1, 1, 1])
-        with c2:
-            if st.button("▶️ Play Demo", key="demo_play", type="primary", use_container_width=True):
-                st.session_state.demo_started = True
-                st.session_state.demo_step = 0
-                st.rerun()
-        st.stop()
-
     # Progress bar
     st.progress(step / total if step < total else 1.0, text=f"Step {min(step+1, total)} of {total}")
 
@@ -1397,7 +1384,6 @@ Open the **Architecture** tab for the full diagram.
         with c3:
             if st.button("⏹️ Reset", key=f"reset_{step}"):
                 st.session_state.demo_step = 0
-                st.session_state.demo_started = False
                 st.rerun()
     else:
         st.markdown("## 🎉 Demo Complete!")
@@ -1405,7 +1391,6 @@ Open the **Architecture** tab for the full diagram.
         st.balloons()
         if st.button("🔄 Run Again", type="primary"):
             st.session_state.demo_step = 0
-            st.session_state.demo_started = False
             st.rerun()
 
 with tab_sup:
